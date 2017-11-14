@@ -1,0 +1,63 @@
+#Python pyc
+
+*.pyc
+
+#Hidden files
+.*
+!.gitignore
+#temp files
+
+*.*~
+*~
+
+#C++ object files
+*.o
+
+#Catkin generated files
+_*.py
+ros/catkin_ws/build
+ros/catkin_ws/build_isolated
+ros/catkin_ws/devel
+ros/catkin_ws/devel_isolated
+
+#Obstacle avoidance Calibration files
+*.cal
+
+#Log files
+*.log
+
+#LaTeX generated files
+*.toc
+*.aux
+*.nav
+*.snm
+
+#orig nad backup files
+*.orig
+*.backup
+
+#Doxygen generated files
+docs/doxygen/
+
+msg_gen/
+srv_gen/
+test_progress
+test_successes.log
+test_total_reward
+brain/src/freenect.py
+brain/data/behavior_precon.csv
+brain/data/behavior_starts.csv
+ros/borg_pioneer/src/borg_pioneer
+brain/data/behavior_completions.csv
+ros/map_analyzer/msg_gen/
+ros/map_analyzer/src/map_analyzer/
+ros/map_analyzer/srv_gen/
+ros/persocom/scripts/haarcascades/
+ros/teleop_keyboard/lib/
+ros/emotion_msg/src/emotion_msg/
+ros/borg_tools/borg_annotation/src/borg_annotation/
+
+brain/data/models
+
+#Catkin ignore files
+ros/catkin_ws/src/object_modeler/CATKIN_IGNORE
