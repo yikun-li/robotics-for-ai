@@ -1,6 +1,6 @@
 import numpy
 import sys
-import cv
+#import cv
 import cv2
 
 def convert_16to8(bit16):

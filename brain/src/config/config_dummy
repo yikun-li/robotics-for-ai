@@ -9,18 +9,3 @@ nao_port_0 = 9559
 pioneer_ip_0 = localhost
 pioneer_port_0 = 12345
 
-[sensor_integration]
-
-#[vision_controller]
-#update_frequency = 10
-#start_port = 50000
-#end_port = 52000
-
-#Startup commands and alias for each module
-modules_settings:
-    
-#Modules to run on each host
-modules:
-[sonar_controller]
-
-[navigation_controller]

@@ -5,8 +5,8 @@ import time
 import os.path
 import subprocess
 
-import cv2
-import cv2.cv as cv
+import cv2 as cv
+#import cv2.cv as cv
 from sensor_msgs.msg import Image, CameraInfo
 from cv_bridge import CvBridge, CvBridgeError
 import numpy 

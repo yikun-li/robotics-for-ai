@@ -1,4 +1,4 @@
-import cv
+import cv2 as cv
 import logging
 import sys
 import os
