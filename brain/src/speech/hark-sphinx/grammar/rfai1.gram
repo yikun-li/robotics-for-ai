@@ -1,0 +1,7 @@
+#JSGF v1.0;
+
+grammar vcc;
+
+public <all> = (what is your name | what color is the sun | please stop);
+
+

@@ -1,0 +1,25 @@
+#Add behaviors in the following layout, please place it in order of the alphabet (except for the tests)
+#[behavior name]
+##behavior description
+#postcondition = postcondition
+#exceptions = exception
+#description = "a description of the behavior"
+##added things to find out
+
+### EXAMPLE BEHAVIORS
+
+
+[dummy]
+description = "Empty behaviour that keeps running. Used to test bodycontroller and movebase"
+postcondition = False
+
+### TESTED BEHAVIORS
+
+[goto_move_base]
+description = ""
+postcondition = False
+
+[goto_wrapper]
+description = ""
+postcondition = False
+

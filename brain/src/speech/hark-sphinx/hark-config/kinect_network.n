@@ -1,0 +1,190 @@
+#!/usr/bin/env batchflow
+<?xml version="1.0"?>
+<Document>
+  <Network type="subnet" name="MAIN">
+    <Node name="node_MAIN_LOOP_1" type="MAIN_LOOP" x="460" y="190">
+      <Parameter name="LENGTH" type="int" value="512" description="The frame length of each channel (in samples) [default: 512]."/>
+      <Parameter name="ADVANCE" type="int" value="160" description="[default: 160]"/>
+      <Parameter name="SAMPLING_RATE" type="int" value="16000" description="[default: 16000]"/>
+      <Parameter name="ALSA_KINECT_1" type="string" value="plughw:2,0" description="ALSA location for kinect [default: plughw:2,0]"/>
+      <Parameter name="WINDOW_LENGTH" type="int" value="512" description="subnet_param"/>
+      <Parameter name="A_MATRIX" type="string" value="speech/hark-sphinx/hark-config/kinect_rectf.zip" description="location of kinect_loc.dat"/>
+      <Parameter name="TRACK_THRESH" type="float" value="30" description="min soundlevel of to be tracked source"/>
+      <Parameter name="TF_CONJ_FILE" type="string" value="speech/hark-sphinx/hark-config/kinect_rectf.zip" description="location of kinect_sep.tff"/>
+      <Parameter name="SEPARATE_GAIN" type="float" value="1.7" description="gain of soundsource before recognition"/>
+      <Parameter name="TRACK_PAUSE" type="float" value="1100" description="length of accepted pause, default 800"/>
+      <Parameter name="TRK_MIN_CONE" type="float" value="20" description="subnet_param"/>
+      <Parameter name="WINDOW" type="int" value="50" description="subnet_param"/>
+      <Parameter name="PERIOD" type="int" value="50" description="subnet_param"/>
+      <Parameter name="MIN_DEG" type="int" value="-90" description="subnet_param"/>
+      <Parameter name="MAX_DEG" type="int" value="90" description="subnet_param"/>
+    </Node>
+    <NetOutput name="OUTPUT_2" node="node_MAIN_LOOP_1" terminal="OUTPUT_2" object_type="any" description="Dynamic"/>
+    <NetOutput name="HarkDataStream" node="node_MAIN_LOOP_1" terminal="HarkDataStream" object_type="any" description="Dynamic"/>
+  </Network>
+  <Network type="iterator" name="MAIN_LOOP">
+    <Node name="node_MultiFFT_1" type="MultiFFT" x="420" y="420">
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="FFT length in sample. [default: 512]"/>
+      <Parameter name="WINDOW" type="string" value="CONJ" description="A window function for FFT. WINDOW should be CONJ, HAMMING, RECTANGLE, or HANNING. [default: CONJ]"/>
+      <Parameter name="WINDOW_LENGTH" type="subnet_param" value="WINDOW_LENGTH" description="Window length of the window function. [default: 512]"/>
+    </Node>
+    <Node name="node_AudioStreamFromMic_1" type="AudioStreamFromMic" x="216" y="180">
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="The frame length of each channel (in samples) [default: 512]."/>
+      <Parameter name="ADVANCE" type="subnet_param" value="ADVANCE" description="The shift length beween adjacent frames (in samples)[default: 160]."/>
+      <Parameter name="CHANNEL_COUNT" type="int" value="4" description="The number of channels."/>
+      <Parameter name="SAMPLING_RATE" type="int" value="16000" description="Sampling rate (Hz) [default: 16000]."/>
+      <Parameter name="DEVICETYPE" type="string" value="ALSA" description="Device type [default: WS]."/>
+      <Parameter name="GAIN" type="string" value="0dB" description="capture gain (dB)  [default: 0dB]."/>
+      <Parameter name="DEVICE" type="subnet_param" value="ALSA_KINECT_1" description="Device name or IP address [default: 127.0.0.1]"/>
+    </Node>
+    <Node name="node_LocalizeMUSIC_1" type="LocalizeMUSIC" x="610" y="490">
+      <Parameter name="MUSIC_ALGORITHM" type="string" value="GEVD" description="Sound Source Localization Algorithm. If SEVD, NOISECM will be ignored"/>
+      <Parameter name="TF_CHANNEL_SELECTION" type="object" value="&lt;Vector&lt;int&gt; 0 1 2 3&gt;" description="Microphone channels for localization"/>
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="The length of a frame (per channel)."/>
+      <Parameter name="SAMPLING_RATE" type="subnet_param" value="SAMPLING_RATE" description="Sampling Rate (Hz)."/>
+      <Parameter name="A_MATRIX" type="subnet_param" value="A_MATRIX" description="Filename of a transfer function matrix."/>
+      <Parameter name="WINDOW" type="subnet_param" value="WINDOW" description="The number of frames used for calculating a correlation function."/>
+      <Parameter name="WINDOW_TYPE" type="string" value="PAST" description="Window selection to accumulate a correlation function. If PAST, the past WINDOW frames from the current frame are used for the accumulation. If MIDDLE, the current frame will be the middle of the accumulated frames. If FUTURE, the future WINDOW frames from the current frame are used for the accumulation. FUTURE is the default from version 1.0, but this makes a delay since we have to wait for the future information. PAST generates a internal buffers for the accumulation, which realizes no delay for localization."/>
+      <Parameter name="PERIOD" type="subnet_param" value="PERIOD" description="The period in which the source localization is processed."/>
+      <Parameter name="NUM_SOURCE" type="int" value="1" description="Number of sources, which should be less than number of channels."/>
+      <Parameter name="MIN_DEG" type="subnet_param" value="MIN_DEG" description="source direction (lower)."/>
+      <Parameter name="MAX_DEG" type="subnet_param" value="MAX_DEG" description="source direction (higher)."/>
+      <Parameter name="LOWER_BOUND_FREQUENCY" type="int" value="1200" description="Lower bound of frequency (Hz) used for correlation function calculation."/>
+      <Parameter name="UPPER_BOUND_FREQUENCY" type="int" value="3400" description="Upper bound of frequency (Hz) used for correlation function calculation."/>
+      <Parameter name="SPECTRUM_WEIGHT_TYPE" type="string" value="A_Characteristic" description="MUSIC spectrum weight for each frequency bin."/>
+      <Parameter name="A_CHAR_SCALING" type="float" value="1.0" description="Scaling factor of the A-Weight with respect to frequency"/>
+      <Parameter name="MANUAL_WEIGHT_SPLINE" type="object" value="&lt;Matrix&lt;float&gt; &lt;rows 2&gt; &lt;cols 5&gt; &lt;data 0.0 2000.0 4000.0 6000.0 8000.0 1.0 1.0 1.0 1.0 1.0&gt; &gt;" description="MUSIC spectrum weight for each frequency bin. This is a 2 by M matrix. The first row represents the frequency, and the second row represents the weight gain. &quot;M&quot; represents the number of key points for the spectrum weight. The frequency range between M key points will be interpolated by spline manner. The format is &quot;&lt;Matrix&lt;float&gt; &lt;rows 2&gt; &lt;cols 2&gt; &lt;data 1 2 3 4&gt; &gt;&quot;."/>
+      <Parameter name="MANUAL_WEIGHT_SQUARE" type="object" value="&lt;Vector&lt;float&gt; 0.0 2000.0 4000.0 6000.0 8000.0&gt;" description="MUSIC spectrum weight for each frequency bin. This is a M order vector. The element represents the frequency points for the square wave. &quot;M&quot; represents the number of key points for the square wave weight. The format is &quot;&lt;Vector&lt;float&gt; 1 2 3 4&gt;&quot;."/>
+      <Parameter name="ENABLE_EIGENVALUE_WEIGHT" type="bool" value="false" description="If true, the spatial spectrum is weighted depending on the eigenvalues of a correlation matrix. We do not suggest to use this function with GEVD and GSVD, because the NOISECM changes the eigenvalue drastically. Only useful for SEVD."/>
+      <Parameter name="ENABLE_INTERPOLATION" type="bool" value="false" description="Enable transfer function interpolation for higher resolution"/>
+      <Parameter name="INTERPOLATION_TYPE" type="string" value="FTDLI" description="Selection for interpolation algorithm"/>
+      <Parameter name="HEIGHT_RESOLUTION" type="float" value="1" description="Height resolution for the sound source localization"/>
+      <Parameter name="AZIMUTH_RESOLUTION" type="float" value="1" description="Azimuth resolution for the sound source localization"/>
+      <Parameter name="RANGE_RESOLUTION" type="float" value="1" description="Range (distance) resolution for the sound source localization"/>
+      <Parameter name="PEAK_SEARCH_ALGORITHM" type="string" value="LOCAL_MAXIMUM" description="Algorithm for peak search in MUSIC spectrum. If LOCAL_MAXIMUM, the peak is defined only when the corresponding grid has the maximum spectrum among those of all adjacent grids. If HILL_CLIMBING, the peak is firstly searched in the azimuth and secondly searched in the elevation in the corresponding azimuth and thirdly searched in the radius in the corresponding azimuth and elevation."/>
+      <Parameter name="MAXNUM_OUT_PEAKS" type="int" value="-1" description="Maximum number of output peaks. If MAXNUM_OUT_PEAKS = NUM_SOURCE, this is compatible with HARK version 1.0. If MAXNUM_OUT_PEAKS = 0, all local maxima are output. If MAXNUM_OUT_PEAKS &lt; 0, MAXNUM_OUT_PEAKS is set to NUM_SOURCE. If MAXNUM_OUT_PEAKS &gt; 0, number of output peaks is limited to MAXNUM_OUT_PEAKS."/>
+      <Parameter name="DEBUG" type="bool" value="false" description="Debug option. If the parameter is true, this node outputs sound localization results to a standard output."/>
+    </Node>
+    <Node name="node_SourceTracker_1" type="SourceTracker" x="650" y="630">
+      <Parameter name="THRESH" type="subnet_param" value="TRACK_THRESH" description="Power threshold for localization results. A localization result with higher power than THRESH is tracked, otherwise ignored."/>
+      <Parameter name="PAUSE_LENGTH" type="subnet_param" value="TRACK_PAUSE" description="Life duration of source in ms. When any localization result for a source is found for more than PAUSE_LENGTH / 10 iterations, the source is terminated. [default: 800]"/>
+      <Parameter name="COMPARE_MODE" type="string" value="DEG" description="The comparison algorithm of Sources. DEG uses inner product, and TFINDEX uses index search (faster)."/>
+      <Parameter name="MIN_SRC_INTERVAL" type="subnet_param" value="TRK_MIN_CONE" description="Source interval threshold in degree. When the angle between a localization result and a source is smaller than MIN_SRC_INTERVAL, the same ID is given to the localization result. [default: 20]"/>
+      <Parameter name="MIN_TFINDEX_INTERVAL" type="int" value="3" description="Source interval threshold in degree. When the angle between a localization result and a source is smaller than MIN_TFINDEX_INTERVAL, the same ID is given to the localization result. [default: 3]"/>
+      <Parameter name="MIN_ID" type="int" value="0" description="Minimum ID of source locations. MIN_ID should be greater than 0 or equal."/>
+      <Parameter name="DEBUG" type="bool" value="false" description="Output debug information if true [default: false]"/>
+    </Node>
+    <Node name="node_SourceIntervalExtender_1" type="SourceIntervalExtender" x="860" y="620">
+      <Parameter name="PREROLL_LENGTH" type="int" value="110" description="Preroll length in frame. [default: 50]"/>
+    </Node>
+    <Node name="node_PowerCalcForMap_1" type="PowerCalcForMap" x="510" y="170">
+      <Parameter name="POWER_TYPE" type="string" value="POW" description="Measure for computing the POW or MAG (i.e. power or magnitude) of the complex spectrum [default: POW]"/>
+    </Node>
+    <Node name="node_CalcSpecAddPower_1" type="CalcSpecAddPower" x="1120" y="140">
+    </Node>
+    <Node name="node_CalcSpecSubGain_1" type="CalcSpecSubGain" x="750" y="320">
+      <Parameter name="ALPHA" type="float" value="1.0" description="Overestimation factor."/>
+      <Parameter name="BETA" type="float" value="0.0" description="Spectral floor."/>
+      <Parameter name="SS_METHOD" type="int" value="2" description="1: Magnitude Spectral Subtraction, 2: Power SS"/>
+    </Node>
+    <Node name="node_EstimateLeak_1" type="EstimateLeak" x="790" y="220">
+      <Parameter name="LEAK_FACTOR" type="float" value="0.25" description="Leak factor [default:0.25]"/>
+      <Parameter name="OVER_CANCEL_FACTOR" type="float" value="1" description="Over cancel value [default:1]"/>
+    </Node>
+    <Node name="node_HRLE_1" type="HRLE" x="790" y="140">
+      <Parameter name="LX" type="float" value="0.20" description="Lx value of estimation, e.g. Lx=0 -&gt; Minimum (MCRA), Lx=0.5 -&gt; Median , Lx=1.0 -&gt; Maximum [default:0.85]"/>
+      <Parameter name="TIME_CONSTANT" type="float" value="16000" description="Time constant for exponential decay window in samples [default:16000]"/>
+      <Parameter name="NUM_BIN" type="float" value="2000" description="Number of histogram bins [default:1000]"/>
+      <Parameter name="MIN_LEVEL" type="float" value="-200" description="Minimum level of histogram bin in dB [default:-100]"/>
+      <Parameter name="STEP_LEVEL" type="float" value="0.2" description="Step level of histogram bin (Width of each histogram bin) in dB [default:0.2]"/>
+      <Parameter name="DEBUG" type="bool" value="false" description="Prints the histogram for each 100 iterations."/>
+    </Node>
+    <Node name="node_SpectralGainFilter_1" type="SpectralGainFilter" x="860" y="440">
+    </Node>
+    <Node name="node_WhiteNoiseAdder_1" type="WhiteNoiseAdder" x="1150" y="270">
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="Size of window length in sample. [default: 512]"/>
+      <Parameter name="WN_LEVEL" type="float" value="0" description="An amplitude of white noise to be added. [default: 0]"/>
+    </Node>
+    <Node name="node_SaveWavePCM_1" type="SaveWavePCM" x="1513" y="240">
+      <Parameter name="BASENAME" type="string" value="sep_files/sep_" description="Basename of files. [default: sep_]"/>
+      <Parameter name="ADVANCE" type="subnet_param" value="ADVANCE" description="The shift length beween adjacent frames (in samples)[default: 160]."/>
+      <Parameter name="SAMPLING_RATE" type="subnet_param" value="SAMPLING_RATE" description="Sampling rate (in samples)[default: 16000]."/>
+      <Parameter name="BITS" type="string" value="int16" description="Bit format of samples. int16 , int24 and float32 bits are supported."/>
+    </Node>
+    <Node name="node_GHDSS_1" type="GHDSS" x="590" y="230">
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="The frame length of each channel (in samples) [default: 512]."/>
+      <Parameter name="ADVANCE" type="subnet_param" value="ADVANCE" description="The shift length beween adjacent frames (in samples)[default: 160]."/>
+      <Parameter name="SAMPLING_RATE" type="subnet_param" value="SAMPLING_RATE" description="Sampling rate (Hz) [default: 16000]."/>
+      <Parameter name="LOWER_BOUND_FREQUENCY" type="int" value="0" description="Lower bound of frequency (Hz). [default: 0]"/>
+      <Parameter name="UPPER_BOUND_FREQUENCY" type="int" value="8000" description="Upper bound of frequency (Hz). [default: 8000]"/>
+      <Parameter name="TF_CONJ_FILENAME" type="subnet_param" value="TF_CONJ_FILE" description="Filename of a pre-measured transfer function for separation."/>
+      <Parameter name="INITW_FILENAME" type="string" value="" description="Filename of an initial separation matrix. If specified, a matrix in INITW_FILENAME is used as an initial separation matrix. Otherwise, initial separation matrix is estimated from the geometrical relationship or pre-measured TF according to TF_CONJ."/>
+      <Parameter name="SS_METHOD" type="string" value="ADAPTIVE" description="The calculation method for SS step size parameter corresponding to the blind separation part. &quot;FIX&quot; uses a fixed step size,&quot;LC_MYU&quot; uses the same value as LC_MYU, and &quot;ADAPTIVE&quot; adaptively estimates an optimal step size. [default: ADAPTIVE]"/>
+      <Parameter name="SS_SCAL" type="float" value="1.0" description="Scaling factor for SS step size. [default: 1.0]"/>
+      <Parameter name="SS_MYU" type="float" value="0.001" description="SS step size value. [default 0.001]"/>
+      <Parameter name="NOISE_FLOOR" type="float" value="0.0" description="Noise floor value. [default 0.0]"/>
+      <Parameter name="LC_CONST" type="string" value="DIAG" description="The calculation method for geometric constraints. &quot;FULL&quot; uses all elements of a matrix, and &quot;DIAG&quot; only uses diagonal parts. [default: DIAG]"/>
+      <Parameter name="LC_METHOD" type="string" value="ADAPTIVE" description="The calculation method for LC step size corresponding to geometric constraints. &quot;FIX&quot; uses a fixed value, and &quot;Adaptive&quot; adaptively estimates an optimal step size. [default: ADAPTIVE]"/>
+      <Parameter name="LC_MYU" type="float" value="0.001" description="LC step size value. [default 0.001]"/>
+      <Parameter name="UPDATE_METHOD_TF_CONJ" type="string" value="POS" description="Switching method of TF_CONJ data. [default: POS]"/>
+      <Parameter name="UPDATE_METHOD_W" type="string" value="ID" description="Switching method of separation matrix, W. [default: ID]"/>
+      <Parameter name="COMPARE_MODE" type="string" value="DEG" description="The comparison algorithm of Sources. DEG uses inner product, and TFINDEX uses index search (faster)."/>
+      <Parameter name="UPDATE_SEARCH_AZIMUTH" type="float" value="" description="Angle of azimuth allowance to serch TF or separation matrix in degree. [default: ]"/>
+      <Parameter name="UPDATE_SEARCH_ELEVATION" type="float" value="" description="Angle of elevation allowance to serch TF or separation matrix in degree. [default: ]"/>
+      <Parameter name="UPDATE_ACCEPT_ANGLE" type="float" value="5.0" description="Angle allowance to switch separation matrix in degree. available when when UPDATE_METHOD_W is POS or ID_POS. [default: 5.0]"/>
+      <Parameter name="UPDATE_ACCEPT_TFINDEX_DISTANCE" type="int" value="1" description="Distance allowance to switch separation matrix in TFIndex. available when when UPDATE_METHOD_W is POS or ID_POS. [default: 1]"/>
+      <Parameter name="CHECK_SOURCE_DISTANCE" type="bool" value="false" description="Check flag for confirm source distace when using TFIndex. [default: false]"/>
+      <Parameter name="EXPORT_W" type="bool" value="false" description="Separation matrix W is exported if true. [default: false]"/>
+      <Parameter name="EXPORT_W_FILENAME" type="string" value="" description="The filename to export W."/>
+      <Parameter name="UPDATE" type="string" value="STEP" description="The update method of separation matrix. &quot;STEP&quot; updates W sequentially, i.e., based on SS and then on LC cost. &quot;TOTAL&quot; updates W based on an integrated value of SS and LC cost [default: STEP]"/>
+    </Node>
+    <Node name="node_Synthesize_1" type="Synthesize" x="1230" y="360">
+      <Parameter name="LENGTH" type="subnet_param" value="LENGTH" description="Size of window length in sample. [default: 512]"/>
+      <Parameter name="ADVANCE" type="subnet_param" value="ADVANCE" description="The length in sample between a frame and a previous frame. [default: 160]"/>
+      <Parameter name="SAMPLING_RATE" type="subnet_param" value="SAMPLING_RATE" description="Sampling rate (Hz) [default: 16000]."/>
+      <Parameter name="MIN_FREQUENCY" type="int" value="125" description="Minimum frequency (Hz) [default: 125]"/>
+      <Parameter name="MAX_FREQUENCY" type="int" value="7900" description="Maximum frequency (Hz) [default: 7900]"/>
+      <Parameter name="WINDOW" type="string" value="HAMMING" description="A window function for overlap-add. WINDOW should be CONJ, HAMMING, RECTANGLE, or HANNING. [default: HAMMING]"/>
+      <Parameter name="OUTPUT_GAIN" type="subnet_param" value="SEPARATE_GAIN" description="Output gain factor. [default: 1.0]"/>
+    </Node>
+    <Node name="node_HarkDataStreamSender_1" type="HarkDataStreamSender" x="1216" y="500">
+      <Parameter name="HOST" type="string" value="localhost" description="Hostname or IP of a receiver"/>
+      <Parameter name="PORT" type="int" value="5530" description="Port number of a receiver"/>
+      <Parameter name="ADVANCE" type="int" value="160" description="Shift sample number for sliding spectrum analysis."/>
+      <Parameter name="BUFFER_SIZE" type="int" value="1024" description="Buffer size"/>
+      <Parameter name="FRAMES_PER_SEND" type="int" value="1" description="Frequency of sending data in frame unit. If 1, the data of every frame will be sent. If 10, the data will be sent when the frame count is a multiple of 10."/>
+      <Parameter name="TIMESTAMP_TYPE" type="string" value="GETTIMEOFDAY" description="Time stamp type. If TIMESTAMP is connected, this is ignored."/>
+      <Parameter name="SAMPLING_RATE" type="int" value="16000" description="The time increment is caluculated as ADVANCE / SAMPLING_RATE"/>
+      <Parameter name="DEBUG_PRINT" type="bool" value="false" description="print debug message of this module in case of true."/>
+      <Parameter name="SOCKET_ENABLE" type="bool" value="true" description="send data via socket in case of &quot;true&quot;."/>
+    </Node>
+    <Node name="node_MultiGain_1" type="MultiGain" x="220" y="300">
+      <Parameter name="GAIN" type="float" value="1.3" description="Gain factor."/>
+    </Node>
+    <Link from="node_MultiFFT_1" output="OUTPUT" to="node_GHDSS_1" input="INPUT_FRAMES"/>
+    <Link from="node_HRLE_1" output="NOISE_SPEC" to="node_CalcSpecAddPower_1" input="INPUT_POWER_SPEC1"/>
+    <Link from="node_EstimateLeak_1" output="LEAK_POWER_SPEC" to="node_CalcSpecAddPower_1" input="INPUT_POWER_SPEC2"/>
+    <Link from="node_CalcSpecAddPower_1" output="OUTPUT_POWER_SPEC" to="node_CalcSpecSubGain_1" input="NOISE_SPEC"/>
+    <Link from="node_LocalizeMUSIC_1" output="OUTPUT" to="node_SourceTracker_1" input="INPUT"/>
+    <Link from="node_SourceTracker_1" output="OUTPUT" to="node_SourceIntervalExtender_1" input="SOURCES"/>
+    <Link from="node_MultiFFT_1" output="OUTPUT" to="node_LocalizeMUSIC_1" input="INPUT"/>
+    <Link from="node_GHDSS_1" output="OUTPUT" to="node_PowerCalcForMap_1" input="INPUT"/>
+    <Link from="node_PowerCalcForMap_1" output="OUTPUT" to="node_HRLE_1" input="INPUT_SPEC"/>
+    <Link from="node_PowerCalcForMap_1" output="OUTPUT" to="node_EstimateLeak_1" input="INPUT_POWER_SPEC"/>
+    <Link from="node_PowerCalcForMap_1" output="OUTPUT" to="node_CalcSpecSubGain_1" input="INPUT_POWER_SPEC"/>
+    <Link from="node_WhiteNoiseAdder_1" output="OUTPUT" to="node_Synthesize_1" input="INPUT"/>
+    <Link from="node_SpectralGainFilter_1" output="OUTPUT_SPEC" to="node_WhiteNoiseAdder_1" input="INPUT"/>
+    <Link from="node_CalcSpecSubGain_1" output="VOICE_PROB" to="node_SpectralGainFilter_1" input="VOICE_PROB"/>
+    <Link from="node_CalcSpecSubGain_1" output="GAIN" to="node_SpectralGainFilter_1" input="GAIN"/>
+    <Link from="node_GHDSS_1" output="OUTPUT" to="node_SpectralGainFilter_1" input="INPUT_SPEC"/>
+    <Link from="node_SourceIntervalExtender_1" output="OUTPUT" to="node_GHDSS_1" input="INPUT_SOURCES"/>
+    <Link from="node_Synthesize_1" output="OUTPUT" to="node_SaveWavePCM_1" input="INPUT"/>
+    <Link from="node_Synthesize_1" output="OUTPUT" to="node_HarkDataStreamSender_1" input="SRC_WAVE"/>
+    <Link from="node_SourceTracker_1" output="OUTPUT" to="node_HarkDataStreamSender_1" input="SRC_INFO"/>
+    <Link from="node_MultiGain_1" output="OUTPUT" to="node_MultiFFT_1" input="INPUT"/>
+    <Link from="node_AudioStreamFromMic_1" output="AUDIO" to="node_MultiGain_1" input="INPUT"/>
+    <NetOutput name="OUTPUT_2" node="node_SaveWavePCM_1" terminal="OUTPUT" object_type="Map&lt;int,ObjectRef&gt;" description="The same as input."/>
+    <NetOutput name="HarkDataStream" node="node_HarkDataStreamSender_1" terminal="OUTPUT" object_type="ObjectRef" description="This is a dummy output, and it has no mean. Only for an activation of this module."/>
+    <NetCondition name="CONDITION" node="node_AudioStreamFromMic_1" terminal="NOT_EOF"/>
+  </Network>
+</Document>

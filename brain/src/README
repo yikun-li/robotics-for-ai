@@ -1,0 +1,34 @@
+The Python source root directory.
+
+*** Running Code ***
+
+From here, you should run things like:
+
+- The brain, e.d.:
+# python brain.py config/my_config
+
+- The communicator (one on each system) if you use one or more vision modules,
+e.d.:
+# python communicator/communicator.py
+
+- The motion controller (if you use the pioneer), e.d.:
+# python pioneercontrol/pioneercontroller/motionController 12345
+
+*** Important Directories ***
+
+- config: Here the main configuration files are located. Normally we have one 
+configuration file per test.
+
+- vision: Here all vision modules are located (can also be other recognition 
+modules that are actually not vision based, e.d. laser navigation etc.)
+
+- behavior: Here all behaviors are located.
+New behaviors are created only after running the generate behavior script, e.d.:
+# python basebehavior/generate_behaviors.py
+
+- speech: Grammer and XML config files for speech recognition.
+See speech/client/grammer/ for example grammer files (first make sure to verify 
+that the grammar file is correctly set in the XML file that you specified in 
+the main config file of your project (e.d. in ./config)).
+
+- body: Bodycontroller, extend with new functionality if you use new hardware.

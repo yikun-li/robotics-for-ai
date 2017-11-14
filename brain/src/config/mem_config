@@ -1,0 +1,13 @@
+#All objects not mentioned here will be kept for the entire runtime of the brain.
+
+[lastonly]
+#all items from which only the last detection needs to be saved. Mainly items that take up much memory
+last_item1 =
+last_item2 = 
+
+[long]
+#all items that have to be saved when the program quits. Not yet implemented! (for now, same as unmentioned objects)
+long_item1 = 
+long_item2 = 
+
+        

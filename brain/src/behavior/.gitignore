@@ -1,0 +1,8 @@
+#Python init file
+
+*__init__*
+
+#Generated files
+
+*.py
+!*_[0-9].py

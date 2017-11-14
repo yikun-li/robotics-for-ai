@@ -1,0 +1,8 @@
+This directory contains all vision modules (or any other recognition modules).
+
+If you like to add your own module, make sure to:
+- To write proper unittests and add it to the testrunner.
+- Write proper documentation that people can use to run the module.
+- Write a simple example behavior.
+- To *not* add huge datasets to the repo (use the online data directory of the BORG).
+- To *not* add any compiled or binary files (except for small images).
