@@ -1,0 +1,5 @@
+time timestamp
+string name
+string json
+---
+bool result
