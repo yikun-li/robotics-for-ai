@@ -1,7 +1,7 @@
 #import cv2.cv as cv
-import cv
+import cv2 as cv
 import numpy as np
-import freenect
+#import freenect
 
 import logging
 import util.nullhandler

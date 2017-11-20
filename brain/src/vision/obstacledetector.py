@@ -1,7 +1,7 @@
 import glob
 import os
 import sys
-import cv
+import cv2 as cv
 import math
 import util.sendsocket
 import time

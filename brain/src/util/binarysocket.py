@@ -1,4 +1,4 @@
-import cv
+import cv2 as cv
 import threading
 import cPickle as pickle
 import struct
