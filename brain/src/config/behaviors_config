@@ -23,3 +23,31 @@ postcondition = False
 description = ""
 postcondition = False
 
+[test_beh]
+description = "Test behavior"
+postcondition = False
+
+[main]
+description = "Main behavior"
+postcondition = False
+
+[sub_print_name]
+description = "Print name"
+postcondition = False
+
+[sub_timer]
+description = "Wait specific time"
+postcondition = False
+
+[sub_probability]
+description = "Probabilitily to print the last value of the name from the memory"
+postcondition = False
+
+[image_process]
+description = "Process image"
+postcondition = False
+
+[sub_image_process]
+description = "Sub bahavior of process image"
+postcondition = False
+

@@ -1,0 +1,11 @@
+[general]
+starting_behavior = main({})
+
+[body]
+number_of_naos = 0
+number_of_pioneers = 0
+nao_ip_0 = localhost
+nao_port_0 = 9559
+pioneer_ip_0 = pioneer
+pioneer_port_0 = 12345
+
