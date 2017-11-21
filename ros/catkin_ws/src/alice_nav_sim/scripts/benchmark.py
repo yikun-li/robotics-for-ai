@@ -43,7 +43,7 @@ def handleInput():
         stopLock.acquire()
         stop = shouldStop
         stopLock.release()
-        inp = raw_input("type which door should close: (1, 2, 3) + enter")
+        inp = raw_input("type which door should open: (1, 2, 3) + enter")
         doorIdx = int(inp)
         openDoor(doorIdx)
         
