@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<robot name="alice" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+<xacro:property name="M_PI" value="3.1415926535897931"/>
+<xacro:property name="DEG2RAD" value="0.017453292" />
+
+<gazebo> 
+	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"> 
+		<robotNamespace>/alice</robotNamespace> 
+	</plugin> 
+</gazebo>
+
+<!-- Dynamixel stand-->
+
+<joint name="head_stand_joint" type="fixed"> <!-- Connection between chassis and bottom rectangular box -->
+	<origin rpy="0 0.04 0" xyz=" 0.24 0.0 0.01"/>
+	<parent link="top_bar"/>
+	<child link="head_stand_link"/>	
+</joint>
+
+<link name="head_stand_link">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.065 0.04 0.04" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+  		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.065 0.04 0.04" />
+  		</geometry>
+	</collision>
+</link>
+
+<gazebo reference="head_stand_link">
+    <material>Gazebo/FlatBlack</material>
+    <turnGravityOff>false</turnGravityOff>
+    <selfCollide>true</selfCollide>
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+</gazebo>
+<!-- First Left to Right Dynamixel -->
+    <joint name="head_yaw_joint" type="revolute">
+	    <origin rpy="0 0 0" xyz=" 0.023 0 0.04"/>
+	    <parent link="head_stand_link"/>
+	    <child link="head_yaw_link"/>
+	    <axis xyz="0 0 1"/>
+	    <limit lower="${-M_PI/2}" upper="${M_PI/2}" effort="10" velocity="${50*DEG2RAD}" />
+            <dynamics damping="50.5"/>
+    </joint>
+
+    <transmission name="head_yaw_joint_transmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="head_yaw_joint_motor" >
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>50</mechanicalReduction>
+        </actuator>
+        <joint name="head_yaw_joint" >
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+        <mechanicalReduction>50</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+        <pulsesPerRevolution>10000</pulsesPerRevolution>
+    </transmission>
+
+    <link name="head_yaw_link">
+	    <origin rpy="0 0 0" xyz="0 0 0"/>
+        <inertial>
+            <origin xyz="0 0 0" />
+            <mass value="0.25" />
+            <inertia  ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+        </inertial>
+	    <visual name="visual">
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+        		<mesh filename="package://alice_description/models/box.dae" scale="0.05 0.03 0.03" />
+      		</geometry>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+      		<geometry>
+        		<mesh filename="package://alice_description/models/box.dae" scale="0.05 0.03 0.03" />
+      		</geometry>
+	    </collision>
+    </link>
+    <gazebo reference="head_yaw_link">
+        <material>Gazebo/FlatBlack</material>
+        <turnGravityOff>false</turnGravityOff>
+        <selfCollide>true</selfCollide>
+        <mu1>100.0</mu1>
+        <mu2>100.0</mu2>
+        <kp>1000000.0</kp>
+        <kd>1.0</kd>
+      </gazebo>
+
+<!-- Second Up to Down Dynamixel -->
+    <joint name="head_pitch_joint" type="revolute">
+	    <origin rpy="${M_PI/2} -0.04 0.0" xyz=" 0.0225 0 0.025"/>
+        <parent link="head_yaw_link"/>
+	    <child link="head_pitch_link"/>
+	    <axis xyz="0 0 1"/>
+	    <limit lower="${0}" upper="${M_PI}" effort="200" velocity="${50*DEG2RAD}"/>
+        <dynamics damping="50.5"/>
+    </joint>
+
+    <transmission name="head_pitch_joint_transmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="head_pitch_joint_motor" >
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>50</mechanicalReduction>
+        </actuator>
+        <joint    name="head_pitch_joint" >
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+        <mechanicalReduction>50</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
+        <pulsesPerRevolution>10000</pulsesPerRevolution>
+    </transmission>
+
+    <link name="head_pitch_link">
+	    <origin rpy="0 0 0" xyz="0 0 0"/>
+	    <inertial>
+            <mass value="10"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+	    <visual name="visual">
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+        		<mesh filename="package://alice_description/models/box.dae" scale="0.05 0.03 0.03" />
+      		</geometry>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+      		<geometry>
+        		<mesh filename="package://alice_description/models/box.dae" scale="0.05 0.03 0.03" />
+      		</geometry>
+	    </collision>
+    </link>
+    <gazebo reference="head_pitch_link">
+        <material>Gazebo/FlatBlack</material>
+        <turnGravityOff>false</turnGravityOff>
+        <selfCollide>true</selfCollide>
+        <mu1>100.0</mu1>
+        <mu2>100.0</mu2>
+        <kp>1000000.0</kp>
+        <kd>1.0</kd>
+      </gazebo>
+
+<!-- Front Xtion -->
+<link name="front_xtion_link">
+	<inertial>
+		<mass value="0.200" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+	</inertial>
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.035 0.18 0.025" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.035 0.18 0.025" />
+  		</geometry>
+	</collision>
+</link>
+
+
+<!-- Gazebo color plugin for xtion -->
+<gazebo reference="front_xtion_link">
+	<selfCollide>false</selfCollide>
+	<static>true</static>
+	<turnGravityOff>false</turnGravityOff>
+	<sensor type="depth" name="front_xtion">
+		<pose>0 0 0 0 0 0</pose>
+		<always_on>1</always_on>
+		<visualize>true</visualize>
+		<camera>
+			<horizontal_fov>1.047</horizontal_fov>
+			<image>
+				<width>320</width>
+				<height>240</height>
+				<format>R8G8B8</format>
+			</image>
+			<depth_camera></depth_camera>
+			<clip>
+				<near>0.1</near>
+				<far>100</far>
+			</clip>
+		</camera>
+		<plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
+			<alwaysOn>true</alwaysOn>
+			<updateRate>30.0</updateRate>
+			<cameraName>front_xtion</cameraName>
+			<frameName>front_rgb_optical_link</frameName>
+			<imageTopicName>rgb/image_raw</imageTopicName>
+			<depthImageTopicName>depth/image_raw</depthImageTopicName>
+			<pointCloudTopicName>depth/points</pointCloudTopicName>
+			<cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+			<depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+			<pointCloudCutoff>0.0</pointCloudCutoff>
+			<pointCloudCutoffMax>4.5</pointCloudCutoffMax>
+			<hackBaseline>0.07</hackBaseline>
+			<distortionK1>0.0</distortionK1>
+			<distortionK2>0.0</distortionK2>
+			<distortionK3>0.0</distortionK3>
+			<distortionT1>0.0</distortionT1>
+			<distortionT2>0.0</distortionT2>
+			<CxPrime>0.0</CxPrime>
+			<Cx>0.0</Cx>
+			<Cy>0.0</Cy>
+			<focalLength>0.0</focalLength>
+		</plugin>
+	</sensor>
+</gazebo>
+
+
+<joint name="head_pitch_to_front_xtion" type="fixed"> <!-- Connection between top bar and front -->
+	<origin rpy=" ${-M_PI/2 + 0.06} -0.04 ${-M_PI/2 - 0.05}" xyz="0.06 -0.02 -0.08"/>
+	<child link="front_xtion_link"/>
+	<parent link="head_pitch_link"/>
+</joint>
+
+<link name="front_rgb_optical_link"/>
+
+<joint name="front_xtion_to_rgb_optical" type="fixed"> <!-- Connection between top bar and front -->
+	<origin rpy="${-M_PI/2} 0 ${-M_PI/2}" xyz="0.00 -0.0 0.00"/>
+	<parent link="front_xtion_link"/>
+	<child link="front_rgb_optical_link"/>
+</joint>
+
+
+
+</robot>

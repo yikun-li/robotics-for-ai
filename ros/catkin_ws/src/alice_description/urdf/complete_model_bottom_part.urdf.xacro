@@ -1,0 +1,296 @@
+<?xml version="1.0"?>
+<robot name="alice" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:property name="M_PI" value="3.1415926535897931"/>
+<xacro:property name="DEG2RAD" value="0.017453292" />
+
+<!-- Bottom cube of alice-->
+<link name="bottom_box">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.57 0.5 0.335" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+  		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.57 0.5 0.335" />
+  		</geometry>
+	</collision>
+</link>
+
+<!-- Gazebo color plugin for bottom box -->
+<gazebo reference="bottom_box">
+    <material>Gazebo/FlatBlack</material>
+</gazebo>
+
+<!-- Connection between chassis and bottom rectangular box -->
+<joint name="base_to_bottom_box" type="fixed">
+	<!--<origin rpy=" 0 0 0" xyz="0.08 0 0.33"/>-->
+	<origin rpy=" 0 0 0" xyz="0.0 0 0.1675"/>
+	<child link="bottom_box"/>
+	<parent link="base_top"/>
+</joint>
+
+
+
+<!-- Middle Connection Bar from bottom box-->
+<link name="middle_bar">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.02 0.04 0.68" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+  		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.02 0.04 0.68" />
+  		</geometry>
+	</collision>
+</link>
+
+
+<joint name="bottom_box_to_middle_bar" type="fixed"> <!-- Connection between Middle bar and bottom rectangular box -->
+	<origin rpy="0 0 0" xyz="-0.07 0 0.50"/>
+	<child link="middle_bar"/>
+	<parent link="bottom_box"/>
+</joint>
+<gazebo reference="middle_bar">
+    <material>Gazebo/Grey</material>
+</gazebo>
+
+
+<!-- Back Connection Bar from bottom box-->
+<link name="back_bar">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.02 0.04 0.68" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+  		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.02 0.04 0.68" />
+  		</geometry>
+	</collision>
+</link>
+
+<gazebo reference="back_bar"> <!-- Gazebo color plugin for bottom box -->
+    <material>Gazebo/Grey</material>
+</gazebo>
+
+<joint name="bottom_box_to_back_bar" type="fixed"> <!-- Connection between back bar and bottom rectangular box -->
+	<origin rpy="0 0 0" xyz="-0.22 0 0.50"/>
+	<child link="back_bar"/>
+	<parent link="bottom_box"/>
+</joint>
+
+<!-- Top Horizontal Connection Bar from bottom box-->
+<link name="top_bar">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.46 0.04 0.02" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+  		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.46 0.04 0.02" />
+  		</geometry>
+	</collision>
+</link>
+
+<joint name="middle_bar_to_top_bar" type="fixed"> <!-- Connection between chassis and bottom rectangular box -->
+	<origin rpy="0 0 0" xyz=" 0.04 0 0.35"/>
+	<child link="top_bar"/>
+	<parent link="middle_bar"/>
+</joint>
+
+
+
+<gazebo reference="top_bar"> <!-- Gazebo color plugin for bottom box -->
+    <material>Gazebo/Grey</material>
+</gazebo>
+
+
+
+
+<!-- The SICK laser. The used model is actually hokuyo -->
+<link name="laser">
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertial>
+        <mass value="10"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+	<visual name="visual">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+    		<mesh filename="package://alice_description/models/hokuyo/meshes/hokuyo.dae"/>
+  		</geometry>
+	</visual>
+	<collision>
+        <geometry>
+            <mesh filename="package://alice_description/models/hokuyo/meshes/hokuyo.dae"/>
+        </geometry>
+    </collision>
+</link>
+
+<gazebo reference="laser">
+    <sensor type="gpu_ray" name="laser">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>50</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.57</min_angle>
+              <max_angle>1.57</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise parameters based on published spec for Hokuyo laser
+                 achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+                 stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+                 reading. -->
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <!-- Plugin to simulate ros laser topic in gazebo and ros-->
+        <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+          <topicName>scan</topicName>
+          <frameName>laser</frameName>
+        </plugin>
+      </sensor>
+</gazebo>
+
+<joint name="base_top_to_laser_link" type="fixed"> <!-- Connection between base_top and laser-->
+	<!--<origin rpy="0 0 3.14" xyz="-0.2 0 0.15 "/>-->
+	<origin rpy="0 0 0" xyz="0.3 0 0.04 "/>
+	<child link="laser"/>
+	<parent link="base_top"/>
+</joint>
+
+
+<!-- Back Xtion -->
+<link name="back_xtion_link">
+	<inertial>
+		<mass value="0.200" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+	</inertial>
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.035 0.18 0.025" />
+  		</geometry>
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+    		<mesh filename="package://alice_description/models/box.dae" scale="0.035 0.18 0.025" />
+  		</geometry>
+	</collision>
+</link>
+
+
+<gazebo reference="back_xtion_link">
+	<selfCollide>false</selfCollide>
+	<static>true</static>
+	<turnGravityOff>false</turnGravityOff>
+	<sensor type="depth" name="back_xtion">
+		<pose>0 0 0 0 0 0</pose>
+		<always_on>1</always_on>
+		<visualize>true</visualize>
+		<camera>
+			<horizontal_fov>1.047</horizontal_fov>
+			<image>
+				<width>320</width>
+				<height>240</height>
+				<format>R8G8B8</format>
+			</image>
+			<depth_camera></depth_camera>
+			<clip>
+				<near>0.1</near>
+				<far>100</far>
+			</clip>
+		</camera>
+		<plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
+			<alwaysOn>true</alwaysOn>
+			<updateRate>30.0</updateRate>
+			<cameraName>back_xtion</cameraName>
+			<frameName>back_rgb_optical_link</frameName>
+			<imageTopicName>rgb/image_raw</imageTopicName>
+			<depthImageTopicName>depth/image_raw</depthImageTopicName>
+			<pointCloudTopicName>depth/points</pointCloudTopicName>
+			<cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+			<depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+			<pointCloudCutoff>0.0</pointCloudCutoff>
+			<pointCloudCutoffMax>4.5</pointCloudCutoffMax>
+			<hackBaseline>0.07</hackBaseline>
+			<distortionK1>0.0</distortionK1>
+			<distortionK2>0.0</distortionK2>
+			<distortionK3>0.0</distortionK3>
+			<distortionT1>0.0</distortionT1>
+			<distortionT2>0.0</distortionT2>
+			<CxPrime>0.0</CxPrime>
+			<Cx>0.0</Cx>
+			<Cy>0.0</Cy>
+			<focalLength>0.0</focalLength>
+		</plugin>
+	</sensor>
+</gazebo>
+
+<joint name="top_bar_to_back_xtion" type="fixed"> <!-- Connection between bottom box and xtion -->
+	<origin rpy="0.0 ${M_PI / 2 - .47} ${M_PI+0.05}" xyz="-0.24 -0.0 0.03"/>
+	<child link="back_xtion_link"/>
+	<parent link="top_bar"/>
+</joint>
+
+<link name="back_rgb_optical_link"/>
+
+<joint name="back_xtion_to_rgb_optical" type="fixed"> <!-- Connection between top bar and front -->
+	<origin rpy="${-M_PI/2} 0 ${-M_PI/2}" xyz="0.00 -0.00 0.00"/>
+	<parent link="back_xtion_link"/>
+	<child link="back_rgb_optical_link"/>
+</joint>
+
+
+</robot>

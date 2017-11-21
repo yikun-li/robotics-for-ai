@@ -1,0 +1,21 @@
+GlobalPlanner:
+  neutral_cost: 1
+
+DWAPlannerROS:
+#Robot Config Params
+  prune_plan: true
+  penalize_negative_x: true
+  min_vel_x: -0.2 # allow backwards driving
+  max_vel_y: 0.0  # diff drive
+  min_vel_y: 0.0  # diff drive
+  vy_samples: 1
+
+  acc_lim_y: 0.0
+
+  scaling_speed: 0.2
+  max_scaling_factor: 0.3
+
+  path_distance_bias: 64.0 # default 32.0
+  goal_distance_bias: 24.0 # default 24.0
+
+

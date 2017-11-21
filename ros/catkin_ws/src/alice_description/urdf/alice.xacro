@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<robot name="alice" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Robot base: base_footprint, chassis (Volksbot) and left and right wheel -->
+<xacro:include filename="$(find volksbot_driver)/urdf/volksbot.urdf.xacro" />
+
+<!-- Bottom part: black box, laser, xtion and laptop stand -->
+<xacro:include filename="$(find alice_description)/urdf/complete_model_bottom_part.urdf.xacro" />
+
+<!-- Head: Xtion + motors -->
+<xacro:include filename="$(find alice_description)/urdf/alice_head.urdf.xacro" />
+
+
+<!-- Arm currently not used-->
+<!-- Mico arm: piece of wood and arm -->
+<!--xacro:include filename="$(find alice_description)/urdf/complete_model_mico_arm.urdf.xacro" /-->
+
+</robot>

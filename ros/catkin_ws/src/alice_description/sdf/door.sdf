@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+    <model name="door">
+        <static>false</static>
+        <link name="door_link">
+            <pose>-0.725 0 0.85 0 0 0</pose>
+            <inertial>
+                <mass>0.0001</mass>
+            </inertial>
+            <collision name="wall_link_0_geom">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>1.45 0.05 1.7</size>
+                    </box>
+                </geometry>
+            </collision>
+            <visual name="wall_link_0_visual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>1.45 0.05 1.7</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Green</name>
+                    </script>
+                </material>
+            </visual>
+        </link>
+        <link name="hinge_link">
+            <pose>-0.725 0 0.85 0 0 0</pose>
+            <inertial>
+                <mass>1000</mass>
+            </inertial>
+            <collision name="hinge_collision">
+                <pose>0.725 0 0 0 0 0</pose>
+                <geometry>
+                    <cylinder> 
+                        <length>1.7</length> 
+                        <radius>0.025</radius>
+                    </cylinder> 
+                </geometry>
+            </collision>
+            <visual name="hinge_visual">
+                <pose>0.725 0 0 0 0 0</pose>
+                <geometry>
+                    <cylinder> 
+                        <length>1.7</length> 
+                        <radius>0.025</radius>
+                    </cylinder> 
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Black</name>
+                    </script>
+                </material>
+            </visual>
+        </link>
+        <joint name="door_hinge" type="revolute">
+            <pose>0.725 0 0 0 0 0</pose>
+            <parent>hinge_link</parent>
+            <child>door_link</child>
+            <axis>
+                <xyz>0 0 1</xyz>
+                <dynamics>
+                    <friction>10</friction>
+                    <damping>1</damping>
+                </dynamics>
+            </axis>
+        </joint>
+        <joint name="door_fixed_to_ground" type="revolute">
+            <parent>world</parent>
+            <child>hinge_link</child>
+            <axis>
+                <xyz>1 1 1</xyz>
+                <limit>
+                    <lower>0</lower>
+                    <upper>0</upper>
+                </limit>
+            </axis>
+        </joint>
+    </model>
+</sdf>
+

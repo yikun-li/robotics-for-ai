@@ -1,0 +1,75 @@
+alice:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+
+  tilt_controller:
+     type: effort_controllers/JointPositionController
+     joint: head_pitch_joint
+     pid: {p: 10000.0, i: 20.0, d: 30.0} 
+
+  pan_controller:
+     type: effort_controllers/JointPositionController
+     joint: head_yaw_joint
+     pid: {p: 10000.0, i: 20.0, d: 30.0} 
+
+  pan_tilt_trajectory_action_controller:
+    type: "effort_controllers/JointTrajectoryController"
+    joints:
+      - head_yaw_joint
+      - head_pitch_joint
+    gains:
+      head_yaw_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+      head_pitch_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+
+#  mico_joint_trajectory_action_controller:
+#    type: "effort_controllers/JointTrajectoryController"
+#    joints:
+#      - mico_shoulder_yaw_joint
+#      - mico_shoulder_pitch_joint
+#      - mico_elbow_pitch_joint
+#      - mico_elbow_roll_joint
+#      - mico_wrist_roll_joint
+#      - mico_hand_roll_joint
+#    gains:
+#      mico_shoulder_yaw_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#      mico_shoulder_pitch_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#      mico_elbow_pitch_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#      mico_elbow_roll_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#      mico_wrist_roll_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#      mico_hand_roll_joint: {p: 10000.0, d: 30.0, i: 20.0, i_clamp: 4.0}
+#next lines are maybe necessary if in addition to the JointTrajectoryController, 
+#other raw joint nodes are utilized that can directly 
+#  joint_trajectory_action_node:
+#    joints:
+#      - mico_shoulder_yaw_joint
+#      - mico_shoulder_pitch_joint
+#      - mico_elbow_pitch_joint
+#      - mico_elbow_roll_joint
+#      - mico_wrist_roll_joint
+#      - mico_hand_roll_joint
+#    constraints:
+#      goal_time: 0.6
+
+#  mico_finger_1_joint_controller:
+#    type: effort_controllers/JointPositionController
+#    joint: mico_finger_1_joint
+#    pid:
+#      p: 100000.0
+#      i: 20.0
+#      d: 1.0
+#      i_clamp: 2.0
+#      deadband: 0.01
+
+#  mico_finger_2_joint_controller:
+#    type: effort_controllers/JointPositionController
+#    joint: mico_finger_2_joint
+#    pid:
+#      p: 100000.0
+#      i: 20.0
+#      d: 1.0
+#      i_clamp: 2.0
+#      deadband: 0.01
+

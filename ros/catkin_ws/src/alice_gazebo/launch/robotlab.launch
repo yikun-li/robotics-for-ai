@@ -1,0 +1,40 @@
+<launch>
+        <arg name="use_sim_time" default="true"/>
+        <!--Set use sim_time flag -->
+        <group if="$(arg use_sim_time)">
+        <param name="/use_sim_time" value="true" />
+        </group>
+
+        <arg name="model" default="Alice"/>
+        <arg name="world" default="robotlab.world"/>
+
+
+        <param name="robot_description" command="$(find xacro)xacro --inorder '$(find alice_description)urdf/alice_sim.xacro'"/>
+
+
+        <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+        <!--include file="$(find gazebo_ros)/launch/willowgarage_world.launch" -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+    	<arg name="world_name" value="$(find alice_gazebo)/worlds/'$(arg world)'" />
+        <!-- more default parameters can be changed here -->
+        </include>
+
+        !-- Spawn Alice into Gazebo -->
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg model) -param robot_description" />
+
+        <!-- Loads ros controllers parameters for gazebo-->
+        <rosparam file="$(find alice_description)/urdf/alice_control.yaml" command="load"/>
+
+        <!-- Loads controller manager to actually simulate joint movements -->
+        <node name="joint_state_controller" pkg="controller_manager" type="spawner" output="screen" ns="/alice"
+        args="pan_controller tilt_controller joint_state_controller" />
+
+
+        
+        <!--param name="use_gui" value="True"/-->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+        <remap from="/joint_states" to="/alice/joint_states" />
+                </node>
+
+</launch>
