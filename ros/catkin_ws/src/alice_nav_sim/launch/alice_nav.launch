@@ -1,11 +1,5 @@
 <launch>
 
-	<!-- Run the map server -->
-	<!-- node ...... /-->
-	
-	<!--- Run AMCL -->
-    <!-- node .... /-->
-
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
 		<rosparam file="$(find alice_nav_sim)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
@@ -25,14 +19,22 @@
     	<param name="remove_noise" value="true"/>
         <param name="input_topic" value="/front_xtion/depth/points"/>
         <param name="output_topic" value="/front_xtion_voxel_grid/output"/>
-    </node>	
+    	</node>	
 
-    <node pkg="borg_pointcloud" name="voxel_xtion2" type="transform">
+    	<node pkg="borg_pointcloud" name="voxel_xtion2" type="transform">
     	<param name="x_min" value="-5.0"/>
 	<param name="leaf_size" value="0.03"/>
     	<param name="remove_noise" value="true"/>
         <param name="input_topic" value="/back_xtion/depth/points"/>
         <param name="output_topic" value="/back_xtion_voxel_grid/output"/>
-    </node>	
+    	</node>	
+
+	<!-- Run the map server -->
+	<node name="map_server_test" pkg="map_server" type="map_server" args="$(find alice_gazebo)/maps/bigroom.yaml"> 
+  	</node>
+
+	<!--- Run AMCL -->
+	<node pkg="amcl" type="amcl" name="amcl"/>
+        
 </launch>
 
