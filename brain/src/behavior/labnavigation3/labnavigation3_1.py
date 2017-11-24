@@ -44,6 +44,9 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
 
 	if self.stuck.is_failed():
 	    print "Alice stuck!"
+            self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
+	    trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))	
+	
 	    self.set_goal('wp_g6')
 	    self.stuck = self.ab.sublabnavigation({})
 
