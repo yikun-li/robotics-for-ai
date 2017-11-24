@@ -23,3 +23,26 @@ postcondition = False
 description = ""
 postcondition = False
 
+[navigation]
+description = ""
+postcondition = False
+
+[three_doors_navigation]
+description = ""
+postcondition = False
+
+[lab_navigation]
+description = ""
+postcondition = False
+
+[lab_navigation2]
+description = ""
+postcondition = False
+
+[lab_navigation3]
+description = ""
+postcondition = False
+
+[sub_lab_navigation]
+description = ""
+postcondition = False
