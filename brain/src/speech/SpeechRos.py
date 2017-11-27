@@ -31,9 +31,9 @@ class Speechrecognizer(threading.Thread):
         self.hark_process = None
         
         # setup PocketSphinx
-        hmm = 'speech/hark-sphinx/model/en-us'
-        lm = 'speech/hark-sphinx/model/en-us.lm'
-        dic = 'speech/hark-sphinx/model/cmu07a.dic'
+        hmm = '../../../speech/hark-sphinx/model/en-us'
+        lm = '../../../speech/hark-sphinx/model/en-us.lm'
+        dic = '../../../speech/hark-sphinx/model/cmu07a.dic'
 
         config = Decoder.default_config()
         config.set_string('-logfn', '/dev/null') #comment for debug information
@@ -117,7 +117,7 @@ class Speechrecognizer(threading.Thread):
         raw = [{'active': False, 'raw': '', 'ID': -1, 'azimuth': 0.0} for x in range(simsrc)]
 
         # define decoding structures
-        header = struct.Struct('3I 2q')
+        header = struct.Struct('3I 4I')
         srcinfo = struct.Struct('I 4f')
         numsrc = struct.Struct('I')
         srcdata = struct.Struct('2I')
@@ -215,7 +215,7 @@ class Speechrecognizer(threading.Thread):
         raw = [{'active': False, 'raw': '', 'ID': -1, 'azimuth': 0.0} for x in range(simsrc)]
 
         # define decoding structures
-        header = struct.Struct('3I 2q')
+        header = struct.Struct('3I 4I')
         srcinfo = struct.Struct('I 4f')
         numsrc = struct.Struct('I')
         srcdata = struct.Struct('2I')

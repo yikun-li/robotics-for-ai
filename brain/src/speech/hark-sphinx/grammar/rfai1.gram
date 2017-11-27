@@ -2,6 +2,13 @@
 
 grammar vcc;
 
-public <all> = (what is your name | what color is the sun | please stop);
+public <all> = <name> ( <question> | <statement> | please stop);
 
+<name> = alice | robot;
+
+<question> = what is your name | what color is the sun;
+
+<statement> = my favorite tee a is <ta>;
+
+<ta> = ( rick | olaf | marc | ben );
 
