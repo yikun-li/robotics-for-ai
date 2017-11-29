@@ -21,7 +21,16 @@ if len(sys.argv) > 2:
 	s2 = sys.argv[2]
 
 print json.dumps({'message' : s1, '2best' : [s1,s2]})
-try: 
+
+
+
+
+ 
+t = rospy.Time.now()
+while t < rospy.Time(1):
+    t = rospy.Time.now()
+print t
+try:
     service_write(rospy.Time.now(), "voice_command", json.dumps({'message' : s1, '2best' : [s1,s2],'azimuth' : 0.153}))
     #service_write(rospy.Time.now(), "Julius", cjson.encode(str(words)))
     print "[tm] command sent"
