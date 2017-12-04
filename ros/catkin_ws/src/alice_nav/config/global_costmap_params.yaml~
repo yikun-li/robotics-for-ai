@@ -1,0 +1,36 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_link
+
+  resolution: 0.05
+  transform_tolerance: 1
+  update_frequency: 2.0
+  publish_frequency: 2.0
+
+  footprint:  [[0.12, 0.30], [0.12, -0.30], [-0.61, -0.30], [-0.61, 0.30]]  
+
+  plugins:
+  - {name: static_layer, type: 'costmap_2d::StaticLayer'}
+  - {name: obstacle_layer_xtions, type: 'costmap_2d::ObstacleLayer'}
+  - {name: obstacle_layer_laser, type: 'costmap_2d::ObstacleLayer'}
+  - {name: inflation_layer, type: 'costmap_2d::InflationLayer'}
+  
+  inflation_layer: {cost_scaling_factor: 15.0, enabled: true, inflation_radius: 0.5}
+
+
+  obstacle_layer_xtions:
+    observation_sources: front_point_cloud_sensor_mark front_point_cloud_sensor_clear back_point_cloud_sensor_mark back_point_cloud_sensor_clear
+    enabled: true
+    track_unknown_space: true
+    combination_method: 0
+    
+  obstacle_layer_layer:
+    observation_sources: laser_scan_sensor
+    track_unknown_space: true
+    enabled: true
+    
+  obstacle_layer_footprint: {enabled: true}
+  
+  static_layer: {enabled: true}
+  static_map: true
+

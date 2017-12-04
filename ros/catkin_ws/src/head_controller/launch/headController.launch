@@ -1,0 +1,29 @@
+
+<launch>
+
+
+    <node name="dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py" required="true" output="screen">
+        <rosparam>
+            namespace: dxl_manager
+            serial_ports:
+                pan_tilt_port:
+                    port_name: "/dev/dynamixel"
+                    baud_rate: 1000000
+                    min_motor_id: 2
+                    max_motor_id: 3
+                    update_rate: 20
+        </rosparam>
+    </node>
+
+
+ <!-- Start tilt pan joint controller -->
+    <rosparam file="$(find head_controller)/config/tiltpan.yaml" command="load"/>
+    <node name="controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+          args="--manager=dxl_manager
+                --port pan_tilt_port
+                tilt_controller
+		pan_controller"
+          output="screen"/>
+          
+
+</launch>

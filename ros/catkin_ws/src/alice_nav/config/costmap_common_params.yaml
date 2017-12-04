@@ -1,0 +1,8 @@
+obstacle_layer_xtions:
+  back_point_cloud_sensor_mark: {clearing: false, data_type: PointCloud2, expected_update_rate: 0.8, obstacle_range: 2.5, raytrace_range: 3.5, marking: true, min_obstacle_height: 0.05, sensor_frame: back_xtion_link, topic: back_xtion_voxel_grid/output}
+  back_point_cloud_sensor_clear: {clearing: true, data_type: PointCloud2, expected_update_rate: 0.8, obstacle_range: 2.5, raytrace_range: 3.5, marking: false, min_obstacle_height: -0.3, sensor_frame: back_xtion_link, topic: back_xtion_voxel_grid/output}
+  front_point_cloud_sensor_mark: {clearing: false, data_type: PointCloud2, expected_update_rate: 0.8, obstacle_range: 2.5, raytrace_range: 3.5, marking: true, min_obstacle_height: 0.05, sensor_frame: front_xtion_link, topic: front_xtion_voxel_grid/output}
+  front_point_cloud_sensor_clear: {clearing: true, data_type: PointCloud2, expected_update_rate: 0.8, obstacle_range: 2.5, raytrace_range: 3.5, marking: false, min_obstacle_height: -0.3, sensor_frame: front_xtion_link, topic: front_xtion_voxel_grid/output}
+  
+obstacle_layer_laser:
+  laser_scan_sensor: {clearing: true, data_type: LaserScan, expected_update_rate: 0.3, marking: true, obstacle_range: 8, raytrace_range: 10, sensor_frame: laser, topic: scan}

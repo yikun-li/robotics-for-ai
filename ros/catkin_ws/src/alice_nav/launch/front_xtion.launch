@@ -1,0 +1,27 @@
+<launch>
+
+   <node pkg="borg_pointcloud" name="voxel_xtion2" type="transform" output="screen">
+    	<param name="x_min" value="-5"/>
+	<!-- The top value cuts the point cloud from the first pilar of the robot-->
+	<param name="leaf_size" value="0.03"/>
+    	<param name="remove_noise" value="true"/>
+        <param name="input_topic" value="/front_xtion/depth/points"/>
+        <param name="output_topic" value="/front_xtion_voxel_grid/output"/>
+    </node>	
+	    
+  <!-- Run kinect -->
+  <include file="$(find openni2_launch)/launch/openni2.launch" >
+    <arg name="respawn" value="true"/>
+    <arg name="camera" value="front_xtion"/>
+    <arg name="device_id" value="3@0"/>
+    <arg name="depth_registration" value="true"/>
+    <!--arg name="ir_processing" value="false"/>
+    <arg name="debayer_processing" value="false"/>
+    <arg name="disparity_processing" value="false"/-->
+  </include>
+  
+  <node name="$(anon dynparam1)" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters /front_xtion/driver">
+    <param name="depth_mode" type="int" value="8" />
+    <param name="color_mode" type="int" value="8" />
+  </node>
+</launch>

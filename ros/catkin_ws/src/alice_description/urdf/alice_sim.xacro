@@ -6,10 +6,17 @@
 <xacro:include filename="$(find volksbot_driver)/urdf/volksbot.urdf.xacro" />
 
 <!-- Bottom part: black box, laser, xtion and laptop stand -->
+<<<<<<< HEAD
+<xacro:include filename="$(find alice_description)/urdf/complete_model_bottom_part.urdf.xacro" />
+
+<!-- Head: Xtion + motors -->
+<xacro:include filename="$(find alice_description)/urdf/alice_head.urdf.xacro" />
+=======
 <xacro:include filename="$(find alice_description)/urdf/complete_model_bottom_part_sim.urdf.xacro" />
 
 <!-- Head: Xtion + motors -->
 <xacro:include filename="$(find alice_description)/urdf/alice_head_sim.urdf.xacro" />
+>>>>>>> testBehaviorDemo
 
 
 <!-- Arm currently not used-->

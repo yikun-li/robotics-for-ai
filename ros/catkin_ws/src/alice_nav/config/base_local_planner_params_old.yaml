@@ -1,0 +1,44 @@
+DWAPlannerROS:
+#Robot Config Params
+  acc_lim_theta: 1
+  acc_lim_x: 0.8
+  acc_lim_y: 0.0
+  acc_limit_trans: 1
+  max_vel_x: 0.35
+  min_vel_x: -0.2 
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+  max_trans_vel: 0.35
+  min_trans_vel: 0.05
+  max_rot_vel: 0.5
+  min_rot_vel: 0.2
+#Forward Simulation Parameters
+  sim_time: 3
+  sim_granularity: 0.025
+  vx_samples: 8
+  vy_samples: 1
+  vth_samples: 30 
+  penalize_negative_x: false
+#Trajectory Scoring Parameters
+  goal_distance_bias: 32.0
+  path_distance_bias: 40.0
+  occdist_scale: 0.05
+  stop_time_buffer: 1
+  forward_point_distance: 0.00
+  scaling_speed: 0.2
+  max_scaling_factor: 0.1
+#Goal Tolerance Parameters
+  xy_goal_tolerance: 0.2
+  yaw_goal_tolerance: 0.1
+  latch_xy_goal_tolerance: true
+  rot_stopped_vel: 0.008
+  trans_stopped_vel: 0.008
+#Oscillation Prevention Param
+  oscillation_reset_dist: 0.5
+  oscillation_reset_angle: 0.2
+#Global Plan PArameters
+  prune_plan: false
+
+
+recovery_behaviors: [{name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}, {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery}]
+

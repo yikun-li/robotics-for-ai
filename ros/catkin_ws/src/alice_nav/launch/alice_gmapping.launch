@@ -1,0 +1,25 @@
+<launch>
+	<!--- Run GMAPPING -->
+	<node pkg="gmapping" type="slam_gmapping" name="gmapping">
+		<param name="base_frame_id" value="base_footprint"/>
+	</node>
+
+	<!-- Run move_base -->
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+		<rosparam file="$(find alice_nav)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find alice_nav)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find alice_nav)/config/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find alice_nav)/config/global_costmap_params.yaml" command="load" />
+		<rosparam file="$(find alice_nav)/config/base_local_planner_params.yaml" command="load" />
+		<param name="controller_frequency" value="5" />
+		<param name="clearing_rotation_allowed" value="false" />
+		<param name="planner_patience" value="5" />
+		<param name="controller_patience" value="5" />
+		<param name="conservative_reset_dist" value="8" />
+		<param name="oscillation_distance" value="0.1" />
+		<param name="oscillation_timeout" value="5" />
+
+		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>	
+	</node>
+</launch>
+

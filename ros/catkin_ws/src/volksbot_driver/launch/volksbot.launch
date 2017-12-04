@@ -5,7 +5,8 @@
     <!-- default values: -->
     
       <param name="wheel_radius" type="double" value="0.127" />
-      <param name="axis_length" type="double" value="0.475" />
+      <param name="axis_length" type="double" value="0.55" /> <!-- 0.475-->
+
       <param name="gear_ratio" type="int" value="74" />
       <param name="turning_adaptation" type="double" value="0.95" />
       <!--param name="x_stddev" type="double" value="0.002" />
