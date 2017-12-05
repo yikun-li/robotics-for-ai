@@ -22,7 +22,7 @@
 		<param name="planner_frequency" value="5" />
 		<param name="controller_frequency" value="10" />
 		<param name="max_planning_retries" value="10" />
-		<param name="clearing_rotation_allowed" value=false />
+		<param name="clearing_rotation_allowed" value="false" />
 	</node>
 </launch>
 
