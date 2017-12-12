@@ -1,0 +1,9 @@
+<launch>
+    <node pkg="object2d_modeler" type="object2d_modeler_node" name="object_modeler" output="screen">
+    	<param name="topic" type="string" value="/camera/rgb/image_raw" />
+    	<param name="width" type="int" value="200" />
+    	<param name="height" type="int" value="200" />
+	<param name="save_folder" type="string" value="$(env HOME)/objects/training/" />	
+	<param name="object" type="string" value="cocaColaLight" /> <!-- adjust this for each object -->		
+	</node>
+</launch>
