@@ -1,0 +1,9 @@
+<launch>
+    <node pkg="object2d_modeler" type="object2d_modeler_node" name="object_modeler" output="screen">
+    	<param name="topic" type="string" value="/kinect2/hd/image_color" />
+    	<param name="width" type="int" value="1920" />
+    	<param name="height" type="int" value="1080" />
+	<param name="save_folder" type="string" value="$(env HOME)/objects/train/" />	
+	<param name="object" type="string" value="salt" /> <!-- adjust this for each object -->	
+	</node>
+</launch>
