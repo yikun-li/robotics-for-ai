@@ -86,6 +86,6 @@ for label in labels:
     testData = np.concatenate([testData, test])
 print "traindatashape: ", trainData.shape
 np.save(NPY_STORAGE + "trainData", trainData)
-np.save(NPY_STOREAGE + "trainLabels", trainLabels)
+np.save(NPY_STORAGE + "trainLabels", trainLabels)
 np.save(NPY_STORAGE + "testData", testData)
 np.save(NPY_STORAGE + "testLabels", testLabels)
