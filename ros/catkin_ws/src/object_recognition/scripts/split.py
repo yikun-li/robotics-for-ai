@@ -4,7 +4,7 @@ import cv2
 from preprocess import preprocess, oneHot
 
 DATADIR = os.environ['HOME'] + "/myBigDataset/"
-NPY_STORAGE = os.environment['HOME'] + "/numpy/"
+NPY_STORAGE = os.environ['HOME'] + "/numpy/"
 imHeight = 32
 imWidht  = 32
 
