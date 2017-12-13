@@ -37,7 +37,7 @@
 #include <opencv2/highgui/highgui.hpp>
 //#include <opencv2/nonfree/features2d.hpp>
 #include "opencv2/features2d/features2d.hpp"
-#include <opencv2/legacy/legacy.hpp>
+//#include <opencv2/legacy/legacy.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 
 #include <actionlib/server/simple_action_server.h>
