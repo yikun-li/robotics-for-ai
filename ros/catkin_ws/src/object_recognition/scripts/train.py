@@ -22,7 +22,7 @@ CHECKPOINT_DIR = "./ckpt/network.ckpt"
 
 PRINT_ACC_EVERY_N_EPOCHS = 5
 network = Network()
-network.load_checkpoint("./ckpt/network.ckpt")
+#network.load_checkpoint("./ckpt/network.ckpt")
 
 
 dataBatches = np.array_split(trainData, N_BATCHES)

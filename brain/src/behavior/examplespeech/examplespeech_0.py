@@ -19,7 +19,6 @@ class ExampleSpeech_x(basebehavior.behaviorimplementation.BehaviorImplementation
 
 
     def update_last_speech_command(self):
-
         # sets the new_command boolean and sets the last understood speech_observation
         if (self.m.n_occurs('voice_command') > 0):
             (recogtime, obs) = self.m.get_last_observation("voice_command")
@@ -31,8 +30,8 @@ class ExampleSpeech_x(basebehavior.behaviorimplementation.BehaviorImplementation
             else:
                 self.new_speech_obs = False
 
-    def implementation_update(self):
 
+    def implementation_update(self):
         self.update_last_speech_command()
 
         if self.new_speech_obs:
@@ -44,8 +43,6 @@ class ExampleSpeech_x(basebehavior.behaviorimplementation.BehaviorImplementation
                 print "so your favorite TA is", the_ta 
 
             self.new_speech_obs = False
-
-
 
 
     ### Helper functions based on JSGFParser ###
