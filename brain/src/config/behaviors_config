@@ -23,14 +23,6 @@ postcondition = False
 description = ""
 postcondition = False
 
-[speech_toplevel]
-description = "Assignment48Part3"
-postcondition = False
-
-[example_speech]
-description = ""
-postcondition = False
-
-[speech_uncertainty]
+[object_recognition]
 description = ""
 postcondition = False

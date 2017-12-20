@@ -74,8 +74,7 @@ class Classifier(object):
         return cv_image
 
     def callback(self, data):
-
-        if (self.counter < 30):
+        if self.counter < 30:
             self.counter += 1;
             return;
         else:
