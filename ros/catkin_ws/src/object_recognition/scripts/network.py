@@ -2,32 +2,32 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import argparse
-import sys
-import tempfile
-
 import tensorflow as tf
-
-FLAGS = None
 
 
 class Network:
-
     def __init__(self):
-        pass
+        self.inputSize = 32
+        self.kernelSize = 5
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.0001
+        self.sess = tf.InteractiveSession()
+        self.train_step = None
+        self.accuracy = None
+        self.x = None
+        self.y_ = None
+        self.build()
 
-    def build(self, args):
-        # Reshape to use within a convolutional neural net.
-        # Last dimension is for "features" - there is only one here, since images are
-        # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
-        with tf.name_scope('reshape'):
-            x_image = tf.reshape(x, [-1, 28, 28, 3])
+    def build(self):
+        self.x = tf.placeholder(tf.float32, shape=[None, self.inputSize, self.inputSize, 3])
+        self.y_ = tf.placeholder(tf.float32, shape=[None, 10])
 
         # First convolutional layer - maps one grayscale image to 32 feature maps.
         with tf.name_scope('conv1'):
-            W_conv1 = self.weight_variable([5, 5, 1, 32])
-            b_conv1 = self.bias_variable([32])
-            h_conv1 = tf.nn.relu(self.conv2d(x_image, W_conv1) + b_conv1)
+            W_conv1 = self.weight_variable([self.kernelSize, self.kernelSize, 3, self.inputSize])
+            b_conv1 = self.bias_variable([self.inputSize])
+            h_conv1 = tf.nn.relu(self.conv2d(self.x, W_conv1) + b_conv1)
 
         # Pooling layer - downsamples by 2X.
         with tf.name_scope('pool1'):
@@ -35,8 +35,9 @@ class Network:
 
         # Second convolutional layer -- maps 32 feature maps to 64.
         with tf.name_scope('conv2'):
-            W_conv2 = self.weight_variable([5, 5, 32, 64])
-            b_conv2 = self.bias_variable([64])
+            W_conv2 = self.weight_variable(
+                [self.kernelSize, self.kernelSize, self.numberOfKernels, self.numberOfKernels * 2])
+            b_conv2 = self.bias_variable([self.numberOfKernels * 2])
             h_conv2 = tf.nn.relu(self.conv2d(h_pool1, W_conv2) + b_conv2)
 
         # Second pooling layer.
@@ -46,17 +47,19 @@ class Network:
         # Fully connected layer 1 -- after 2 round of downsampling, our 28x28 image
         # is down to 7x7x64 feature maps -- maps this to 1024 features.
         with tf.name_scope('fc1'):
-            W_fc1 = self.weight_variable([7 * 7 * 64, 1024])
-            b_fc1 = self.bias_variable([1024])
+            W_fc1 = self.weight_variable([int(self.inputSize / 4 * self.inputSize / 4 * self.numberOfKernels * 2),
+                                          self.numberOfNeuron])
+            b_fc1 = self.bias_variable([self.numberOfNeuron])
 
-            h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 64])
+            h_pool2_flat = tf.reshape(h_pool2,
+                                      [-1, int(self.inputSize / 4 * self.inputSize / 4 * self.numberOfKernels * 2)])
             h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
         # Dropout - controls the complexity of the model, prevents co-adaptation of
         # features.
         with tf.name_scope('dropout'):
-            keep_prob = tf.placeholder(tf.float32)
-            h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+            self.keep_prob = tf.placeholder(tf.float32)
+            h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
 
         # Map the 1024 features to 10 classes, one for each digit
         with tf.name_scope('fc2'):
@@ -64,24 +67,42 @@ class Network:
             b_fc2 = self.bias_variable([10])
 
             y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
-        return y_conv, keep_prob
 
-    def save_checkpoint(self):
-        pass
+        with tf.name_scope('loss'):
+            cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=self.y_,
+                                                                    logits=y_conv)
+        cross_entropy = tf.reduce_mean(cross_entropy)
+
+        with tf.name_scope('adam_optimizer'):
+            self.train_step = tf.train.AdamOptimizer(self.learningRate).minimize(cross_entropy)
+
+        with tf.name_scope('accuracy'):
+            correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(self.y_, 1))
+            correct_prediction = tf.cast(correct_prediction, tf.float32)
+        self.accuracy = tf.reduce_mean(correct_prediction)
+        self.sess.run(tf.global_variables_initializer())
+
+    def store_checkpoint(self, file_name):
+        saver = tf.train.Saver()
+        save_path = saver.save(self.sess, file_name)
+        print("Model saved in file: %s" % save_path)
 
     def restore_checkpoint(self):
-        pass
+        saver = tf.train.Saver()
+        saver.restore(self.sess, "/tmp/model.ckpt")
+        print("Model restored.")
 
     def train_batch(self, data, labels):
-        pass
+        self.train_step.run(session=self.sess, feed_dict={self.x: data, self.y_: labels, self.keep_prob: 0.5})
 
     def test_batch(self, data, labels):
-        pass
+        return self.accuracy.eval(session=self.sess, feed_dict={self.x: data, self.y_: labels, self.keep_prob: 1.0})
 
-    def feed_batch(self, data):
-        pass
+    # def feed_batch(self, data):
+    #     out = self.L4.eval(session=self.sess, feed_dict={self.x: data})
+    #     return np.argmax(out)
 
-    def load_checkpoint(self, dir):
+    def load_checkpoint(self, x):
         pass
 
     def conv2d(self, x, W):
