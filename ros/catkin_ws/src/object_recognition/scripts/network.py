@@ -8,10 +8,10 @@ import tensorflow as tf
 class Network:
     def __init__(self):
         self.inputSize = 32
-        self.kernelSize = 5
+        self.kernelSize = 6
         self.numberOfKernels = 32
         self.numberOfNeuron = 1024
-        self.learningRate = 0.0001
+        self.learningRate = 0.00001
         self.sess = tf.InteractiveSession()
         self.train_step = None
         self.accuracy = None

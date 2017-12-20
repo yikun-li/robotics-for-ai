@@ -1,6 +1,8 @@
 import os
-import numpy as np
+
 import cv2
+import numpy as np
+
 from preprocess import preprocess, oneHot
 
 DATADIR = os.environ['HOME'] + "/dataset/data/"
@@ -33,8 +35,8 @@ for label in labels:
 
     for x in os.walk(DATADIR + label):  # 1 iter
         nImgs = len(x[2])
-        currentData = np.zeros((nImgs, imHeight, imWidht, 3))
-        currentLabels = np.zeros((nImgs, len(labels)))
+        currentData = np.zeros((nImgs, imHeight, imWidht, 3), dtype='uint8')
+        currentLabels = np.zeros((nImgs, len(labels)), dtype='uint8')
         imIdx = 0
         for im in x[2]:
 
@@ -83,7 +85,13 @@ for label in labels:
         trainLabels = np.concatenate([trainLabels, trainL])
         testLabels = np.concatenate([testLabels, testL])
         testData = np.concatenate([testData, test])
+print "shuffeling data..."
+idx = np.random.permutation(len(trainData))
+trainData, trainLabels = trainData[idx], trainLabels[idx]
+idx = np.random.permutation(len(testData))
+testData, testLabels = testData[idx], testLabels[idx]
 print "traindatashape: ", trainData.shape
+print "storing data to folder: ", NPY_STORAGE
 np.save(NPY_STORAGE + "trainData", trainData)
 np.save(NPY_STORAGE + "trainLabels", trainLabels)
 np.save(NPY_STORAGE + "testData", testData)

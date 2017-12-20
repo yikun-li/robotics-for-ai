@@ -1,6 +1,6 @@
-import numpy as np
-import cv2
 import os
+
+import numpy as np
 
 from network import Network
 
@@ -15,7 +15,7 @@ validationLabels = np.load(NPY_STORAGE + "testLabels.npy")
 N_BATCHES = 150  # N batches
 N_ITERATIONS = 2000
 
-MAKE_CHECKPOINT_EACH_N_ITERATIONS = 100
+MAKE_CHECKPOINT_EACH_N_ITERATIONS = 10
 CHECKPOINT_DIR = "./ckpt/network.ckpt"
 
 PRINT_ACC_EVERY_N_EPOCHS = 5
@@ -48,10 +48,16 @@ def train():
     # print nBatches
     for epoch in range(N_ITERATIONS):
         for batchIdx in range(nBatches):
-            if batchIdx == nBatches - 1:
-                network.train_batch(dataBatches[batchIdx][:remainder_train], labelBatches[batchIdx][:remainder_train])
+            data = dataBatches[batchIdx]
+            data = data.astype('float')
+            data /= 255
+            labels = labelBatches[batchIdx]
+            labels = labels.astype('float')
+
+            if batchIdx == nBatches - 1 and remainder_train != 0:
+                network.train_batch(data[:remainder_train], labels[:remainder_train])
             else:
-                network.train_batch(dataBatches[batchIdx], labelBatches[batchIdx])
+                network.train_batch(data, labels)
         if epoch % PRINT_ACC_EVERY_N_EPOCHS == 0:
             print "@epoch ", epoch, "/", N_ITERATIONS, " validation accuracy = ", test()
         if epoch % MAKE_CHECKPOINT_EACH_N_ITERATIONS == 0 and epoch != 0:
@@ -65,14 +71,23 @@ def test():
     nBatches = len(validationDataBatches)
     ##print "nData = ", nData
     # print "vallabshape ", validationLabelBatches.shape
+    counter = 0
     for batchIdx in range(nBatches):
-        if batchIdx == nBatches - 1:
-            acc = network.test_batch(validationDataBatches[batchIdx][:remainder_test],
-                                     validationLabelBatches[batchIdx][:remainder_test])
+        data = validationDataBatches[batchIdx]
+        data = data.astype('float')
+        data /= 255
+        labels = validationLabelBatches[batchIdx]
+        labels = labels.astype('float')
+        if batchIdx == nBatches - 1 and remainder_test != 0:
+            acc = network.test_batch(data[:remainder_test], labels[:remainder_test])
+            acc *= remainder_test
+            counter += remainder_test
         else:
-            acc = network.test_batch(validationDataBatches[batchIdx], validationLabelBatches[batchIdx])
+            acc = network.test_batch(data, labels)
+            acc *= batchsize
+            counter += batchsize
         runningAvg += acc  # * len(validationDataBatches)
-    runningAvg /= nBatchesValidation
+    runningAvg /= counter
     return runningAvg
 
 
