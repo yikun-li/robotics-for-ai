@@ -8,10 +8,10 @@ import tensorflow as tf
 class Network:
     def __init__(self):
         self.inputSize = 32
-        self.kernelSize = 4
+        self.kernelSize = 5
         self.numberOfKernels = 32
         self.numberOfNeuron = 1024
-        self.learningRate = 0.00001
+        self.learningRate = 0.0001
         self.sess = tf.InteractiveSession()
         self.train_step = None
         self.accuracy = None
@@ -98,11 +98,14 @@ class Network:
     def test_batch(self, data, labels):
         return self.accuracy.eval(session=self.sess, feed_dict={self.x: data, self.y_: labels, self.keep_prob: 1.0})
 
-    # def feed_batch(self, data):
-    #     out = self.L4.eval(session=self.sess, feed_dict={self.x: data})
-    #     return np.argmax(out)
+    def feed_batch(self, data):
+        out = self.accuracy.eval(session=self.sess, feed_dict={self.x: data})
+        return out
 
     def load_checkpoint(self, x):
+        saver = tf.train.Saver()
+        saver.restore(self.sess, "/tmp/model.ckpt")
+        print("Model restored.")
         pass
 
     def conv2d(self, x, W):

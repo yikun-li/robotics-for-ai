@@ -43,6 +43,8 @@ def test():
         labels = validationLabelBatches[batchIdx]
         labels = labels.astype('float')
         if batchIdx == nBatches - 1 and remainder_test != 0:
+            print data[:remainder_test]
+            print labels[:remainder_test]
             acc = network.test_batch(data[:remainder_test], labels[:remainder_test])
             print acc
             acc *= remainder_test

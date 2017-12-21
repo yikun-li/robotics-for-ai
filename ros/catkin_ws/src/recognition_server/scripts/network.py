@@ -15,6 +15,7 @@ class Network:
         self.sess = tf.InteractiveSession()
         self.train_step = None
         self.accuracy = None
+        self.y_conv = None
         self.x = None
         self.y_ = None
         self.build()
@@ -66,18 +67,18 @@ class Network:
             W_fc2 = self.weight_variable([1024, 10])
             b_fc2 = self.bias_variable([10])
 
-            y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
+            self.y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
         with tf.name_scope('loss'):
             cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=self.y_,
-                                                                    logits=y_conv)
+                                                                    logits=self.y_conv)
         cross_entropy = tf.reduce_mean(cross_entropy)
 
         with tf.name_scope('adam_optimizer'):
             self.train_step = tf.train.AdamOptimizer(self.learningRate).minimize(cross_entropy)
 
         with tf.name_scope('accuracy'):
-            correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(self.y_, 1))
+            correct_prediction = tf.equal(tf.argmax(self.y_conv, 1), tf.argmax(self.y_, 1))
             correct_prediction = tf.cast(correct_prediction, tf.float32)
         self.accuracy = tf.reduce_mean(correct_prediction)
         self.sess.run(tf.global_variables_initializer())
@@ -98,12 +99,14 @@ class Network:
     def test_batch(self, data, labels):
         return self.accuracy.eval(session=self.sess, feed_dict={self.x: data, self.y_: labels, self.keep_prob: 1.0})
 
-    # def feed_batch(self, data):
-    #     out = self.L4.eval(session=self.sess, feed_dict={self.x: data})
-    #     return np.argmax(out)
+    def feed_batch(self, data):
+        out = self.y_conv.eval(session=self.sess, feed_dict={self.x: data, self.keep_prob: 1.0})
+        return out
 
     def load_checkpoint(self, x):
-        pass
+        saver = tf.train.Saver()
+        saver.restore(self.sess, x)
+        print("Model restored.")
 
     def conv2d(self, x, W):
         """conv2d returns a 2d convolution layer with full stride."""

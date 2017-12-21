@@ -7,9 +7,11 @@ import numpy as np
 import rospy
 import tensorflow as tf
 from alice_msgs.msg import *
-from recognition_server.msg import *
 from cv_bridge import CvBridge, CvBridgeError
+from recognition_server.msg import *
 from sensor_msgs.msg import Image
+
+from network import Network
 
 
 class RService:
@@ -20,6 +22,7 @@ class RService:
         print('Waiting ROI server')
         self.client.wait_for_server()
         print('Connected to ROI server')
+        self.counter = 0
 
         self.bridge = CvBridge()  # Use CvBridge for converting
         self.image = rospy.wait_for_message("/front_xtion/rgb/image_raw", Image)
@@ -28,14 +31,30 @@ class RService:
         self.action_server = actionlib.SimpleActionServer("image_server", ProcessAction, self.callback, False)
         self.action_server.start()
 
+        self.height = 32
+        self.width = 32
+        self.nClasses = 10
+        self.CHECKPOINT_DIR = "./ckpt/network.ckpt"
+
+        self.network = Network()
+        self.network.load_checkpoint(self.CHECKPOINT_DIR)
+
+        self.list_label = [
+            'Fanta',
+            'SportsDrink',
+            'ChickenSoup',
+            'TomatoSoup',
+            'Shampoo',
+            'EraserBox',
+            'Coke',
+            'Salt',
+            'Chips',
+            'YellowContainer']
+
+        self.count = 0
+        self.success = 0
+
     def callback(self, goal):
-        # if self.counter < 30:
-        #     self.counter += 1;
-
-        #     return;
-        # else:
-        #     self.counter = 0;
-
         # receiving image here
         rgb_image = self.convert_image_cv(self.image)
 
@@ -43,13 +62,12 @@ class RService:
         goal.action = "findObjects"  # 'findObjects' is currently the only action that can be done
         self.client.send_goal(goal)  # Send a goal to start the action server to find ROIs
 
-        ### EXAMPLE FOR TESTING ONLY
-        # self.client.wait_for_result(
-        #     rospy.Duration.from_sec(60));  # DON'T DO THIS IN YOUR BEHAVIOUR!!!!!!!!!!!!!!!!!!!!
-        ### END EXAMPLE FOR TESTING ONLY
+        self.client.wait_for_result(
+            rospy.Duration.from_sec(60))
 
         ROIs = None
         if self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
+            print('Success')
             client_data = self.client.get_result()
             ROIs = client_data.roi
 
@@ -58,22 +76,48 @@ class RService:
             return
 
         for i in range(len(ROIs)):
-            padding = 1
-            obj = rgb_image[ROIs[i].top - padding:ROIs[i].bottom + padding, ROIs[i].left -
-                                                                            padding:ROIs[i].right + padding]
+            top = ROIs[i].top
+            bottom = ROIs[i].bottom
+            left = ROIs[i].left
+            right = ROIs[i].right
 
-            obj2 = np.zeros((224, 224))
-            obj2 = cv2.normalize(obj, obj2, -1, 1)
-            print(np.max(obj2), np.min(obj2))
-            obj = cv2.resize(obj2, (224, 224))
+            height = bottom - top
+            width = right - left
 
-            answer = self.run_inference_on_image([obj])
-            cv2.putText(obj, answer, (0, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1, 1)
-            cv2.imshow("object", obj)
-            print(answer)
+            if width > 200:
+                break
 
-            cv2.waitKey(2000)
+            padding1, padding2 = 5, 5
+            if height > width:
+                padding2 += (height - width) / 2
+            else:
+                padding1 += (width - height) / 2
+
+            obj = rgb_image[ROIs[i].top - padding1: ROIs[i].bottom + padding1,
+                  ROIs[i].left - padding2: ROIs[i].right + padding2]
+            # obj = rgb_image[ROIs[i].top - padding:ROIs[i].bottom + padding,
+            #       ROIs[i].left - padding:ROIs[i].right + padding]
+
+            i = self.preprocess(obj)
+            result = self.network.feed_batch(i)
+            # print(result)
+            print(self.list_label[int(np.argmax(result))])
+
+            self.count += 1
+            if int(np.argmax(result)) == 8:
+                self.success += 1
+            print('Rate: ' + str(float(self.success) / float(self.count)))
+
+            cv2.imshow('image', obj)
+            cv2.waitKey(1000)
             cv2.destroyAllWindows()
+
+        # try:
+        #     rtn = ProcessResult()
+        #     rtn.sum = 1
+        #     self.action_server.set_succeeded(rtn)
+        # except Exception as e:
+        #     print(e)
 
     # convert from sensor_msg format to opencv format (Numpy)
     # goal.image.encoding)
@@ -88,25 +132,11 @@ class RService:
             print(e)
         return cv_image
 
-    def run_inference_on_image(self, img):
-        softmax_tensor = self.sess.graph.get_tensor_by_name('final_result:0')
-        predictions = self.sess.run(softmax_tensor,
-                                    {'input:0': img})
-
-        predictions = np.squeeze(predictions)
-
-        top_k = predictions.argsort()[-5:][::-1]  # Getting top 5 predictions
-        f = open(self.labelPath, 'rb')
-        lines = f.readlines()
-        labels = [str(w).replace("\n", "") for w in lines]
-        print('\n New run: \n')
-        for node_id in top_k:
-            human_string = labels[node_id]
-            score = predictions[node_id]
-            print('%s (score = %.5f)' % (human_string, score))
-
-        answer = labels[top_k[0]]
-        return answer
+    def preprocess(self, image):
+        image = cv2.resize(image, (self.height, self.width))
+        image = image.reshape((-1, self.height, self.width, 3))
+        image = image.astype('uint8')
+        return image
 
 
 if __name__ == '__main__':
