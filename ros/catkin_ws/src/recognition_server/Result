@@ -7,16 +7,35 @@ Shampoo             100%
 Eraser              100%
 YellowContainer     48.15%
 SportsDrink         100%
-chip                0%
-Fenta               23%
+Chip                0%
+Fanta               23%
 Salt                100%
 ------------------------------------------
 Google neural network
 ------------------------------------------
-TomatoSoup          50.7%
-Cola                48%
-Salt                76.9%
-
+TomatoSoup          100%
+Cola                100%
+ChickenSoup         100%
+Shampoo             100%
+Eraser              75%
+YellowContainer     100%
+SportsDrink         100%
+Chip                73.9%
+Fanta               100%
+Salt                100%
+------------------------------------------
+Google neural network - original images
+------------------------------------------
+TomatoSoup          100%
+Cola                78.8%
+ChickenSoup         96%
+Shampoo             100%
+Eraser              90.7%
+YellowContainer     84.5%
+SportsDrink         95.5%
+Chip                33.3%
+Fanta               100%
+Salt                100%
 
 
 

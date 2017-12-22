@@ -1,0 +1,10 @@
+Fanta 0
+SportsDrink 1
+ChickenSoup 2
+TomatoSoup 3
+Shampoo 4
+EraserBox 5
+Coke 6
+Salt 7
+Chips 8
+TellowContainer 9

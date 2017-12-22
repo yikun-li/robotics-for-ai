@@ -128,7 +128,7 @@ class RService:
                 out, labIdx = self.run_inference_on_image(i)
 
                 self.count += 1
-                if labIdx == 3:
+                if labIdx == 1:
                     self.success += 1
                 print('Rate: ' + str(float(self.success) / float(self.count)))
 
