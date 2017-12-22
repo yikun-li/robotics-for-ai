@@ -1,7 +1,7 @@
 # Goal 
-int32 min
-int32 max
+int32 state
 ---
 # Result
-int32 sum
+string obj
+string result
 ---

@@ -55,6 +55,9 @@ class RService:
         self.success = 0
 
     def callback(self, goal):
+        if goal.state == 0:
+            self.action_server.set_aborted('Please send the correct command!')
+
         # receiving image here
         rgb_image = self.convert_image_cv(self.image)
 
@@ -67,7 +70,7 @@ class RService:
 
         ROIs = None
         if self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
-            print('Success')
+            # print('Success')
             client_data = self.client.get_result()
             ROIs = client_data.roi
 
@@ -98,13 +101,16 @@ class RService:
             # obj = rgb_image[ROIs[i].top - padding:ROIs[i].bottom + padding,
             #       ROIs[i].left - padding:ROIs[i].right + padding]
 
+            # data = obj.astype('float')
+            # data /= 255
+
             i = self.preprocess(obj)
             result = self.network.feed_batch(i)
             # print(result)
             print(self.list_label[int(np.argmax(result))])
 
             self.count += 1
-            if int(np.argmax(result)) == 8:
+            if int(np.argmax(result)) == 6:
                 self.success += 1
             print('Rate: ' + str(float(self.success) / float(self.count)))
 
@@ -112,12 +118,16 @@ class RService:
             cv2.waitKey(1000)
             cv2.destroyAllWindows()
 
-        # try:
-        #     rtn = ProcessResult()
-        #     rtn.sum = 1
-        #     self.action_server.set_succeeded(rtn)
-        # except Exception as e:
-        #     print(e)
+            try:
+                rtn = ProcessResult()
+                rtn.obj = self.list_label[int(np.argmax(result))]
+                rtn.result = '{0:.2f}'.format(float(self.success) / float(self.count))
+                self.action_server.set_succeeded(rtn)
+                return
+            except Exception as e:
+                print(e)
+
+        self.action_server.set_aborted('Did not find the object!')
 
     # convert from sensor_msg format to opencv format (Numpy)
     # goal.image.encoding)
