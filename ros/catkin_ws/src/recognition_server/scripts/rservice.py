@@ -59,6 +59,8 @@ class RService:
             self.action_server.set_aborted('Please send the correct command!')
 
         # receiving image here
+        self.image = rospy.wait_for_message("/front_xtion/rgb/image_raw", Image)
+        self.labelPath = '/home/student/dataset/labels.txt'
         rgb_image = self.convert_image_cv(self.image)
 
         goal = ObjectROIGoal()  # Create a goal message
@@ -90,7 +92,7 @@ class RService:
             if width > 200:
                 break
 
-            padding1, padding2 = 5, 5
+            padding1, padding2 = 1, 1
             if height > width:
                 padding2 += (height - width) / 2
             else:
@@ -107,10 +109,10 @@ class RService:
             i = self.preprocess(obj)
             result = self.network.feed_batch(i)
             # print(result)
-            print(self.list_label[int(np.argmax(result))])
+            print('Object: ', self.list_label[int(np.argmax(result))])
 
             self.count += 1
-            if int(np.argmax(result)) == 6:
+            if int(np.argmax(result)) == 7:
                 self.success += 1
             print('Rate: ' + str(float(self.success) / float(self.count)))
 
@@ -121,7 +123,7 @@ class RService:
             try:
                 rtn = ProcessResult()
                 rtn.obj = self.list_label[int(np.argmax(result))]
-                rtn.result = '{0:.2f}'.format(float(self.success) / float(self.count))
+                rtn.result = '{0:.2f}'.format(100 * float(self.success) / float(self.count))
                 self.action_server.set_succeeded(rtn)
                 return
             except Exception as e:
