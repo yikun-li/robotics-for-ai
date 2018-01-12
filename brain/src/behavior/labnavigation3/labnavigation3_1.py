@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from geometry_msgs.msg import PoseStamped
+
 '''
 this is an automatically generated template, if you don't rename it, it will be overwritten!
 '''
@@ -15,7 +17,6 @@ import tf
 class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_init(self):
-
         self.startNavigating = False
         self.data_path = '/brain/data/locations/lab.dat'
         # Dict containing <name: location> pairs
@@ -30,7 +31,7 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             ("goto_movebase", "True"),
             ("goto", "self.startNavigating == True"),
             ("stuck", "True"),
-            ]
+        ]
 
         self.state = 'enter'
         self.transform = tf.TransformListener()
@@ -41,7 +42,6 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         pass
 
     def implementation_update(self):
-
         if self.stuck.is_failed():
             print("Alice stuck!")
             self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
@@ -119,3 +119,24 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             print("Location loaded: " + values[0] + " " + str(propDict))
 
         fileHandle.close()
+
+    def find_behind_point(self, x=-2.0, y=0):
+        self.transform.waitForTransform('/base_link', '/map', rospy.Time(0), rospy.Duration(0.2))
+        new_point = PoseStamped()
+        new_point.header.frame_id = 'base_link'
+        new_point.header.stamp = rospy.Time(0)
+        new_point.pose.position.x = x
+        new_point.pose.position.y = y
+
+        p = self.transform.transformPose('map', new_point)
+
+        quaternion = (
+            p.pose.orientation.x,
+            p.pose.orientation.y,
+            p.pose.orientation.z,
+            p.pose.orientation.w
+        )
+
+        euler = tf.transformations.euler_from_quaternion(quaternion)
+
+        return {'x': p.pose.position.x, 'y': p.pose.position.y, 'angle': math.degrees(euler[2])}
