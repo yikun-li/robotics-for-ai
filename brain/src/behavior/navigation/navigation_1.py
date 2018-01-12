@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import math
 import os
+import random
 
 import basebehavior.behaviorimplementation
 import rospy
@@ -13,6 +14,8 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_init(self):
         self.waypoint = ['hallway1', 'waypoint1', 'arena1']
+        self.aim_point = -1
+        self.state_back_up = None
 
         self.startNavigating = False
         self.data_path = '/brain/data/locations/lab.dat'
@@ -34,24 +37,35 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.transform = tf.TransformListener()
 
     def implementation_update(self):
-        if self.stuck.is_failed() and self.state.startswith('go_to'):
-            print("Alice stuck!")
-            self.set_goal(self.find_behind_point())
-            self.state = 'stuck'
+        if self.stuck.is_failed() and (self.state.startswith('go_to') or self.state == 'stuck'):
+            print("Alice stuck!!!")
+
+            if not self.state == 'stuck':
+                self.state_back_up = self.state
+                self.state = 'stuck'
+                self.set_goal(self.find_behind_point())
+            else:
+                x = random.randint(0, 2)
+                y = random.randint(0, 2)
+                self.set_goal(self.find_behind_point(x, y))
             self.stuck = self.ab.sublabnavigation({})
+
         elif self.state == 'stuck' and self.goto.is_finished():
-            pass
+            self.state = self.state_back_up
+            self.set_goal(self.waypoint[self.aim_point])
 
         if self.state == 'enter':
             self.state = 'go_to_hall'
-            self.set_goal(self.waypoint[0])
+            self.aim_point = 0
+            self.set_goal(self.waypoint[self.aim_point])
             self.startNavigating = True
             self.stuck = self.ab.sublabnavigation({})
 
         elif self.state == 'go_to_hall' and self.goto.is_finished():
             self.state = 'go_to_way'
+            self.aim_point = 1
             self.body.say('I am navigating')
-            self.set_goal(self.waypoint[1])
+            self.set_goal(self.waypoint[self.aim_point])
 
         # elif self.state == 'go_to_hall' and self.goto.is_failed():
         #     self.set_goal(self.waypoint[1])
@@ -68,8 +82,9 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'wait3' and rospy.Time.now() - self.time > rospy.Duration(3):
             self.state = 'go_to_arena'
+            self.aim_point = 2
             self.body.say('I am navigating')
-            self.set_goal(self.waypoint[2])
+            self.set_goal(self.waypoint[self.aim_point])
 
         elif self.state == 'go_to_arena' and self.goto.is_finished():
             self.time = rospy.Time.now()
@@ -82,12 +97,14 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'wait5' and rospy.Time.now() - self.time > rospy.Duration(5):
             self.state = 'go_to_way2'
-            self.set_goal(self.waypoint[1])
+            self.aim_point = 1
+            self.set_goal(self.waypoint[self.aim_point])
             self.body.say('I am navigating')
 
         elif self.state == 'go_to_way2' and self.check_if_close_to_the_goal(self.waypoint[1]):
             self.state = 'go_to_hall2'
-            self.set_goal(self.waypoint[0])
+            self.aim_point = 0
+            self.set_goal(self.waypoint[self.aim_point])
             self.startNavigating = True
 
         elif self.state == 'go_to_hall2' and self.goto.is_finished():

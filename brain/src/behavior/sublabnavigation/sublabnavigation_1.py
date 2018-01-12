@@ -32,10 +32,12 @@ class SubLabNavigation_x(basebehavior.behaviorimplementation.BehaviorImplementat
         if len(self.history) <= 200:
             return False
 
-        cursor = -200
-        distance = math.pow((self.history[cursor][0] - trans[0]), 2) + math.pow((self.history[cursor][1] - trans[1]), 2)
+        sum_dis = 0
+        for i in range(1, 3):
+            sum_dis += math.pow((self.history[-i * 100][0] - trans[0]), 2) + math.pow(
+                (self.history[-i * 100][1] - trans[1]), 2)
 
-        if distance < 0.2:
+        if sum_dis < 0.6:
             return True
         else:
             return False
