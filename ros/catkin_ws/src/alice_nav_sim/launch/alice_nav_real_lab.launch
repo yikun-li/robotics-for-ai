@@ -1,0 +1,40 @@
+<launch>
+
+	<!-- Run move_base -->
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+		<rosparam file="$(find alice_nav_sim)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find alice_nav_sim)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find alice_nav_sim)/config/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find alice_nav_sim)/config/global_costmap_params.yaml" command="load" />
+		<rosparam file="$(find alice_nav_sim)/config/base_local_planner_params.yaml" command="load" />
+		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+		<param name="base_global_planner" value="global_planner/GlobalPlanner" />
+		<param name="planner_frequency" value="5" />
+		<param name="controller_frequency" value="10" />
+	</node>
+
+
+	<node pkg="borg_pointcloud" name="voxel_xtion1" type="transform" output="screen">
+	<param name="leaf_size" value="0.03"/>
+    	<param name="remove_noise" value="true"/>
+        <param name="input_topic" value="/front_xtion/depth/points"/>
+        <param name="output_topic" value="/front_xtion_voxel_grid/output"/>
+    	</node>
+
+    	<node pkg="borg_pointcloud" name="voxel_xtion2" type="transform">
+    	<param name="x_min" value="-5.0"/>
+	<param name="leaf_size" value="0.03"/>
+    	<param name="remove_noise" value="true"/>
+        <param name="input_topic" value="/back_xtion/depth/points"/>
+        <param name="output_topic" value="/back_xtion_voxel_grid/output"/>
+    	</node>
+
+	<!-- Run the map server -->
+	<node name="map_server_test" pkg="map_server" type="map_server" args="$(find alice_gazebo)/maps/mylabmap.yaml">
+  	</node>
+
+	<!--- Run AMCL -->
+	<node pkg="amcl" type="amcl" name="amcl"/>
+
+</launch>
+

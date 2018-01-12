@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 '''
 this is an automatically generated template, if you don't rename it, it will be overwritten!
 '''
@@ -30,9 +32,9 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.goto_movebase = self.ab.GotoMoveBase({'fileLocations': self.data_path})
         self.goto = self.ab.gotowrapper({})
 
-        self.selected_behaviors = [ \
-            ("goto_movebase", "True"), \
-            ("goto", "self.startNavigating == True"), \
+        self.selected_behaviors = [
+            ("goto_movebase", "True"),
+            ("goto", "self.startNavigating == True"),
             ]
 
         self.state = 'enter'
@@ -53,7 +55,6 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'goto_hall' and self.goto.is_failed():
             self.set_goal('waypoint')
-
 
         elif self.state == 'goto_way' and self.goto.is_finished():
             self.time = rospy.Time.now()
@@ -132,7 +133,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         try:
             fileHandle = open(fileName, 'r')
         except:
-            print "Cannot open location file " + fileName
+            print("Cannot open location file " + fileName)
             return
 
         firstLineSkipped = False
@@ -158,7 +159,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             # Store location
             propDict = {'x': float(values[1]), 'y': float(values[2]), 'angle': float(values[3])}
             self.storedLocations[values[0]] = propDict
-            print "Location loaded: " + values[0] + " " + str(propDict)
+            print("Location loaded: " + values[0] + " " + str(propDict))
 
         fileHandle.close()
 
