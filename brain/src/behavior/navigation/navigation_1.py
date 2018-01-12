@@ -16,6 +16,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.waypoint = ['hallway1', 'waypoint1', 'arena1']
         self.aim_point = -1
         self.state_back_up = None
+        self.stuck_position = None
 
         self.startNavigating = False
         self.data_path = '/brain/data/locations/lab.dat'
@@ -43,14 +44,18 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             if not self.state == 'stuck':
                 self.state_back_up = self.state
                 self.state = 'stuck'
-                self.set_goal(self.find_behind_point())
+                self.stuck_position = self.find_behind_point()
+                self.set_goal(self.stuck_position)
             else:
                 x = random.randint(0, 2)
                 y = random.randint(0, 2)
-                self.set_goal(self.find_behind_point(x, y))
+                self.stuck_position = self.find_behind_point(x, y)
+                self.set_goal(self.stuck_position)
             self.stuck = self.ab.sublabnavigation({})
 
-        elif self.state == 'stuck' and self.goto.is_finished():
+        # elif self.state == 'stuck' and self.goto.is_finished():
+        elif self.state == 'stuck' and self.check_if_close_to_the_goal(x=self.stuck_position['x'],
+                                                                       y=self.stuck_position['y']):
             self.state = self.state_back_up
             self.set_goal(self.waypoint[self.aim_point])
 
@@ -112,12 +117,16 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             self.startNavigating = False
             self.set_finished()
 
-    def check_if_close_to_the_goal(self, goal):
+    def check_if_close_to_the_goal(self, goal=None, x=None, y=None):
         self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
         trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
 
-        distance = math.pow((self.storedLocations[goal]['x'] - trans[0]), 2) + math.pow(
-            (self.storedLocations[goal]['y'] - trans[1]), 2)
+        if goal:
+            distance = math.pow((self.storedLocations[goal]['x'] - trans[0]), 2) + math.pow(
+                (self.storedLocations[goal]['y'] - trans[1]), 2)
+        else:
+            distance = math.pow((x - trans[0]), 2) + math.pow((y - trans[1]), 2)
+
         if distance <= 0.5:
             return True
         else:
