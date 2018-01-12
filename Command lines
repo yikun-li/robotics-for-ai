@@ -1,0 +1,7 @@
+python ./basebehavior/generate_behaviors.py
+
+./start.sh config/config_lab_nav
+
+roslaunch alice_nav_sim alice_nav_lab.launch
+
+
