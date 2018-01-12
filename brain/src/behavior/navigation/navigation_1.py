@@ -12,8 +12,7 @@ from geometry_msgs.msg import PoseStamped
 class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_init(self):
-        self.count = 1
-        self.return_state = False
+        self.waypoint = ['hallway1', 'waypoint1', 'arena1']
 
         self.startNavigating = False
         self.data_path = '/brain/data/locations/lab.dat'
@@ -34,54 +33,55 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_update(self):
         if self.state == 'enter':
-            self.state = 'goto_hall'
-            self.set_goal('waypoint')
+            self.state = 'go_to_hall'
+            self.set_goal(self.waypoint[0])
             self.startNavigating = True
 
-        elif self.state == 'goto_hall' and self.goto.is_finished():
-            self.state = 'goto_way'
-            self.set_goal('waypoint')
+        elif self.state == 'go_to_hall' and self.goto.is_finished():
+            self.state = 'go_to_way'
             self.body.say('I am navigating')
+            self.set_goal(self.waypoint[1])
 
-        elif self.state == 'goto_hall' and self.goto.is_failed():
-            self.set_goal('waypoint')
+        # elif self.state == 'go_to_hall' and self.goto.is_failed():
+        #     self.set_goal(self.waypoint[1])
 
-        elif self.state == 'goto_way' and self.goto.is_finished():
+        elif self.state == 'go_to_way' and self.goto.is_finished():
             self.time = rospy.Time.now()
             self.state = 'wait3'
             self.body.say('I have arrived')
 
-        elif self.state == 'goto_way' and self.goto.is_failed():
-            self.set_goal('hallway')
-            self.body.say('I failed')
-            self.body.say('I am navigating')
+        # elif self.state == 'go_to_way' and self.goto.is_failed():
+        #     self.set_goal(self.waypoint[0])
+        #     self.body.say('I failed')
+        #     self.body.say('I am navigating')
 
         elif self.state == 'wait3' and rospy.Time.now() - self.time > rospy.Duration(3):
-            self.state = 'goto_arena'
-            self.set_goal('arena')
+            self.state = 'go_to_arena'
             self.body.say('I am navigating')
+            self.set_goal(self.waypoint[2])
 
-        elif self.state == 'goto_arena' and self.goto.is_finished():
+        elif self.state == 'go_to_arena' and self.goto.is_finished():
             self.time = rospy.Time.now()
             self.state = 'wait5'
             self.body.say('I have arrived')
 
-        elif self.state == 'goto_arena' and self.goto.is_failed():
-            self.set_goal('arena')
-            self.body.say('I failed')
+        # elif self.state == 'go_to_arena' and self.goto.is_failed():
+        #     self.set_goal(self.waypoint[2])
+        #     self.body.say('I failed')
 
         elif self.state == 'wait5' and rospy.Time.now() - self.time > rospy.Duration(5):
-            self.state = 'goto_way2'
-            self.set_goal('waypoint')
+            self.state = 'go_to_way2'
+            self.set_goal(self.waypoint[1])
             self.body.say('I am navigating')
 
-        elif self.state == 'goto_goal' and self.check_if_close_to_the_goal('waypoint'):
-            self.state = 'goal_hall2'
-            self.set_goal('hallway')
+        elif self.state == 'go_to_way2' and self.check_if_close_to_the_goal(self.waypoint[1]):
+            self.state = 'go_to_hall2'
+            self.set_goal(self.waypoint[0])
+            self.startNavigating = True
 
-        elif self.state == 'goto_hall2' and (self.goto.is_finished() or self.goto.is_failed()):
-            self.startNavigating = False
+        elif self.state == 'go_to_hall2' and self.goto.is_finished():
             self.body.say('I have arrived')
+            self.startNavigating = False
             self.set_finished()
 
     def check_if_close_to_the_goal(self, goal):
@@ -97,12 +97,6 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def set_goal(self, goal):
         self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': -1})
-
-    def is_next_goal(self):
-        if self.count >= 6 and self.return_state == True:
-            return False
-        else:
-            return True
 
     def read_stored_locations(self, fileName):
         """ Read file with stored locations during navigation training """
