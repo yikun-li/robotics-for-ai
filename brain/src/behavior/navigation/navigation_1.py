@@ -22,20 +22,31 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         self.goto_movebase = self.ab.GotoMoveBase({'fileLocations': self.data_path})
         self.goto = self.ab.gotowrapper({})
+        self.stuck = self.ab.sublabnavigation({})
 
         self.selected_behaviors = [
             ("goto_movebase", "True"),
             ("goto", "self.startNavigating == True"),
+            ("stuck", "True"),
         ]
 
         self.state = 'enter'
         self.transform = tf.TransformListener()
 
     def implementation_update(self):
+        if self.stuck.is_failed() and self.state.startswith('go_to'):
+            print("Alice stuck!")
+            self.set_goal(self.find_behind_point())
+            self.state = 'stuck'
+            self.stuck = self.ab.sublabnavigation({})
+        elif self.state == 'stuck' and self.goto.is_finished():
+            pass
+
         if self.state == 'enter':
             self.state = 'go_to_hall'
             self.set_goal(self.waypoint[0])
             self.startNavigating = True
+            self.stuck = self.ab.sublabnavigation({})
 
         elif self.state == 'go_to_hall' and self.goto.is_finished():
             self.state = 'go_to_way'

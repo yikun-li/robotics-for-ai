@@ -48,12 +48,12 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             # self.set_goal({trans[0]})
             print('position: ', trans)
 
-            x = random.randint(-1, 1)
+            # x = random.randint(-1, 1)
             # y = random.randint(-1, 1)
-            y = 0
+            # y = 0
 
-            print('x', x, 'y', y)
-            self.set_goal(self.find_behind_point(x, y))
+            # print('x', x, 'y', y)
+            self.set_goal(self.find_behind_point())
             self.stuck = self.ab.sublabnavigation({})
             self.state = 'stuck'
             self.startNavigating = True
