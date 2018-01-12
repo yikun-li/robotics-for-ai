@@ -9,6 +9,7 @@ import random
 import basebehavior.behaviorimplementation
 import rospy
 import tf
+from geometry_msgs.msg import PoseStamped
 
 
 class ThreeDoorsNavigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
@@ -151,3 +152,24 @@ class ThreeDoorsNavigation_x(basebehavior.behaviorimplementation.BehaviorImpleme
             print "Location loaded: " + values[0] + " " + str(propDict)
 
         fileHandle.close()
+
+    def find_behind_point(self, x=-2.0, y=0):
+        self.transform.waitForTransform('/base_link', '/map', rospy.Time(0), rospy.Duration(0.2))
+        new_point = PoseStamped()
+        new_point.header.frame_id = 'base_link'
+        new_point.header.stamp = rospy.Time(0)
+        new_point.pose.position.x = x
+        new_point.pose.position.y = y
+
+        p = self.transform.transformPose('map', new_point)
+
+        quaternion = (
+            p.pose.orientation.x,
+            p.pose.orientation.y,
+            p.pose.orientation.z,
+            p.pose.orientation.w
+        )
+
+        euler = tf.transformations.euler_from_quaternion(quaternion)
+
+        return {'x': p.pose.position.x, 'y': p.pose.position.y, 'angle': math.degrees(euler[2])}

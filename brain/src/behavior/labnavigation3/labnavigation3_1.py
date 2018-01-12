@@ -1,17 +1,12 @@
 from __future__ import print_function
 
-from geometry_msgs.msg import PoseStamped
-
-'''
-this is an automatically generated template, if you don't rename it, it will be overwritten!
-'''
-
 import math
 import os
 
 import basebehavior.behaviorimplementation
 import rospy
 import tf
+from geometry_msgs.msg import PoseStamped
 
 
 class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementation):
