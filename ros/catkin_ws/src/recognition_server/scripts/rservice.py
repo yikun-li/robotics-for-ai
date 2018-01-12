@@ -174,6 +174,17 @@ class RService:
         image = image.astype('uint8')
         return image
 
+    # This function will process one image such that it is usable by Mobilenet.
+    def preprocess_g(self, img):  # input is a numpy image
+        # First we'll resize the image such that the network can process it. Possible imagesizes are: '224', '192',
+        # '160', or '128' (See retrain.py line 84 comments) By default, 'run.sh' uses the 224 network. You may choose
+        # anotherone, by changing the 224 part in 'run.sh' to another valid size.
+
+        img = cv2.resize(img, (224, 224))
+        img = img.astype(float) / 255  # goto [0.0,1.0] instead of [0,255]
+        img = np.reshape(img, (1, 224, 224, 3))
+        return img
+
     # This function will load a trained network file (probably called output_graph.pb in ./tmp/) It will return a tf
     # session, which should be stored as a member variable (in your class). I use it globally here as an example.
     def loadNetwork(self, pb_file_location):
@@ -190,17 +201,6 @@ class RService:
             content = f.readlines()
         content = [x.strip() for x in content]
         return content
-
-    # This function will process one image such that it is usable by Mobilenet.
-    def preprocess_g(self, img):  # input is a numpy image
-        # First we'll resize the image such that the network can process it. Possible imagesizes are: '224', '192',
-        # '160', or '128' (See retrain.py line 84 comments) By default, 'run.sh' uses the 224 network. You may choose
-        # anotherone, by changing the 224 part in 'run.sh' to another valid size.
-
-        img = cv2.resize(img, (224, 224))
-        img = img.astype(float) / 255  # goto [0.0,1.0] instead of [0,255]
-        img = np.reshape(img, (1, 224, 224, 3))
-        return img
 
     # This function will run
     def run_inference_on_image(self, image_data):
