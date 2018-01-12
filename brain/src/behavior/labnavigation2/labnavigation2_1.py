@@ -77,7 +77,7 @@ class LabNavigation2_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': -1})
 
     def get_goal(self):
-        if self.return_state == False:
+        if not self.return_state:
             return self.prefix[0] + str(self.count)
         else:
             return self.prefix[1] + str(self.count)

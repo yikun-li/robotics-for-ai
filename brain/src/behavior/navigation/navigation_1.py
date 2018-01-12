@@ -1,9 +1,5 @@
 from __future__ import print_function
 
-'''
-this is an automatically generated template, if you don't rename it, it will be overwritten!
-'''
-
 import math
 import os
 
@@ -14,12 +10,8 @@ from geometry_msgs.msg import PoseStamped
 
 
 class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
-    '''this is a behavior implementation template'''
-
-    # this implementation should not define an __init__ !!!
 
     def implementation_init(self):
-
         self.count = 1
         self.return_state = False
 
@@ -35,14 +27,12 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.selected_behaviors = [
             ("goto_movebase", "True"),
             ("goto", "self.startNavigating == True"),
-            ]
+        ]
 
         self.state = 'enter'
         self.transform = tf.TransformListener()
-        pass
 
     def implementation_update(self):
-
         if self.state == 'enter':
             self.state = 'goto_hall'
             self.set_goal('waypoint')
@@ -92,12 +82,9 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         elif self.state == 'goto_hall2' and (self.goto.is_finished() or self.goto.is_failed()):
             self.startNavigating = False
             self.body.say('I have arrived')
-            self.is_finished()
-
-        pass
+            self.set_finished()
 
     def check_if_close_to_the_goal(self, goal):
-
         self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
         trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
 
@@ -110,13 +97,6 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def set_goal(self, goal):
         self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': -1})
-
-    def next_goal(self):
-        if self.return_state == False and self.count == 6:
-            self.count = 1
-            self.return_state = True
-        else:
-            self.count += 1
 
     def is_next_goal(self):
         if self.count >= 6 and self.return_state == True:

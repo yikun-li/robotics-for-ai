@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import math
 import os
+import random
 
 import basebehavior.behaviorimplementation
 import rospy
@@ -37,15 +38,32 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         pass
 
     def implementation_update(self):
+        # and not self.state == 'stuck'
         if self.stuck.is_failed():
             print("Alice stuck!")
+            print(self.find_behind_point())
+
             self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
             trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
+            # self.set_goal({trans[0]})
+            print('position: ', trans)
 
-            self.set_goal({trans[0]})
+            x = random.randint(-1, 1)
+            # y = random.randint(-1, 1)
+            y = 0
+
+            print('x', x, 'y', y)
+            self.set_goal(self.find_behind_point(x, y))
             self.stuck = self.ab.sublabnavigation({})
+            self.state = 'stuck'
+            self.startNavigating = True
 
-        if self.state == 'enter':
+        if self.state == 'stuck' and self.goto.is_finished():
+            self.state = 'goto_goal'
+            self.set_goal('wp_g6')
+            self.startNavigating = True
+
+        elif self.state == 'enter':
             self.state = 'goto_goal'
             self.set_goal('wp_g6')
             self.startNavigating = True
