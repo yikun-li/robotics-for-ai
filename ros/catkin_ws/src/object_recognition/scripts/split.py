@@ -4,7 +4,7 @@ import cv2
 from preprocess import preprocess, oneHot
 
 DATADIR = os.environ['HOME'] + "/myBigDataset/"
-NPY_STORAGE = os.environment['HOME'] + "/numpy/"
+NPY_STORAGE = os.environ['HOME'] + "/numpy/"
 imHeight = 32
 imWidht  = 32
 
@@ -86,6 +86,6 @@ for label in labels:
     testData = np.concatenate([testData, test])
 print "traindatashape: ", trainData.shape
 np.save(NPY_STORAGE + "trainData", trainData)
-np.save(NPY_STOREAGE + "trainLabels", trainLabels)
+np.save(NPY_STORAGE + "trainLabels", trainLabels)
 np.save(NPY_STORAGE + "testData", testData)
 np.save(NPY_STORAGE + "testLabels", testLabels)
