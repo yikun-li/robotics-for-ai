@@ -20,8 +20,10 @@ class ApproachTable_x(basebehavior.behaviorimplementation.BehaviorImplementation
     def implementation_update(self):
 
         if (self.state == "connect"):
-           if (self.client.wait_for_server(rospy.Duration(0.1))):
-               self.state = "send";
+            if (self.client.wait_for_server(rospy.Duration(0.1))):
+                self.state = "send";
+            else:
+                print 'Could not connect to alice approach server!';
     
         elif (self.state == "send"):
             goal = aliceapproachGoal();
