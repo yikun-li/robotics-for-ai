@@ -13,7 +13,7 @@ if __name__ == '__main__':
     print 'found server'
 	
     goal = aliceapproachGoal()
-    goal.plane = True
+    goal.plane = False
     
     client.send_goal(goal)
     client.wait_for_result(rospy.Duration.from_sec(60.0))  # use this for time-out checking, if takes to long stop waiting

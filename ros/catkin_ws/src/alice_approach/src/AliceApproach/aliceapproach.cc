@@ -416,8 +416,12 @@ bool AliceApproach::approachObjects()
 
 	ros::Rate r(10);
 
-	while (d_receivedPlane = false)
+	while (d_receivedPlane == false)
 		r.sleep();
+
+    ROS_INFO_STREAM("AT POSITION");
+    movePan(panPosition);
+	moveTilt(tiltPosition);
 
 	as.setSucceeded();
 }

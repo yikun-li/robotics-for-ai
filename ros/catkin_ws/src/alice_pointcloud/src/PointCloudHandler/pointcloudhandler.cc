@@ -68,9 +68,9 @@ bool PointCloudHandler::getPlane(PCLPointCloudPtr &pointcloud, PCLPointCloudPtr 
 	// Mandatory
 	seg.setModelType(pcl::SACMODEL_PLANE);
 	seg.setMethodType(pcl::SAC_RANSAC);
-	seg.setDistanceThreshold (0.01);  // 0.015
+	seg.setDistanceThreshold (0.015);  // 0.015
 	seg.setMaxIterations(500);
-
+    //ROS_INFO_STREAM(pointcloud->points.size());
 	seg.setInputCloud(pointcloud);
 	seg.segment(*inliers, *coefficients);
 
@@ -187,7 +187,7 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 			Point minPt, maxPt;
 			getMinMax3D(*planeCloud, minPt, maxPt);
 
-			if (fabs(maxPt.z - minPt.z) < 0.06f) // planes can be vertical
+			if (fabs(maxPt.z - minPt.z) < 0.15f) // planes can be vertical
 			{
 				PCLPointCloudPtr tempCloud(new PCLPointCloud);
 				for (size_t point = 0; point < planeCloud->points.size(); ++point)
