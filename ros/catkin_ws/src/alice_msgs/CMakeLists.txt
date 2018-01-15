@@ -50,8 +50,8 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    Location.msg
    PcPlane.msg
-   EEFPosition.msg
-   EEFPositionFingers.msg
+   #EEFPosition.msg
+   #EEFPositionFingers.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -67,9 +67,9 @@ add_service_files(
    pointcloudfunction.action
    alicecontrollerfunction.action
    aliceapproach.action
-   Sweep.action
-   Tool.action
-   Grasp.action
+   #Sweep.action
+   #Tool.action
+   #Grasp.action
  )
 
 ## Generate added messages and services with any dependencies listed here
