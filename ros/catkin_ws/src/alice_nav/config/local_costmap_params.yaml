@@ -11,7 +11,7 @@ local_costmap:
   publish_frequency: 5.0
   
   #Convex Footprint, points will be connected in a counter clock wise manner. [[x1,y1],[x2,y2], ..., [xn,yn]]
-  footprint:  [[0.18, 0.30], [0.18, -0.30], [-0.61, -0.30], [-0.61, 0.30]] 
+  footprint:  [[0.22, 0.30], [0.22, -0.30], [-0.61, -0.30], [-0.61, 0.30]] 
 
   #Ordering Matters
   plugins:
