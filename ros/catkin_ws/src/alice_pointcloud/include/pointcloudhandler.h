@@ -23,9 +23,11 @@ class PointCloudHandler
 	Publisher object_pub;
 	Publisher v_plane_pub;
 
-	bool d_done;
-
 	tf::TransformListener tfTransformer;
+
+	size_t failCounter;
+
+	size_t preCount;
 
 	public:
 		PointCloudHandler(ros::NodeHandle &n);

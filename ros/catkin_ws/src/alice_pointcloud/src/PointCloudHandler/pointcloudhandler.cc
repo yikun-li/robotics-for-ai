@@ -1,28 +1,26 @@
 #include <pointcloudhandler.h>
-
+#include <fstream>
 PointCloudHandler::PointCloudHandler(ros::NodeHandle &n) :
 	as(n, "pointcloudfunction", boost::bind(&PointCloudHandler::execute, this, _1), false)
 {
 	d_nh = n;
 	as.start(); // start the action server
-	// REMOVE THE SUB FROM HERE, TESTING ONLY
-//	d_pc_sub = d_nh.subscribe<sensor_msgs::PointCloud2>("front_xtion/depth_registered/points", 1, &PointCloudHandler::pcCallback, this);
 
 	reset();
-	d_detectMultiPlane = true;
 
 	plane_pub = d_nh.advertise<PCLPointCloud>("alice_pointcloud/planes", 1);
 	v_plane_pub = d_nh.advertise<alice_msgs::PcPlane>("alice_pointcloud/vPlanes", 1);
-	object_pub = d_nh.advertise<sensor_msgs::PointCloud2>("alice_pointcloud/objectsCloud", 1);
+	object_pub = d_nh.advertise<PCLPointCloud>("alice_pointcloud/objectsCloud", 1);
 }
 
 void PointCloudHandler::reset()
 {
-	d_done = false;
 	d_detectMultiPlane = false;
 	d_detectPlane = false;
 	d_detectEmptyShelf = false;
 	d_detectObjects = false;
+	failCounter = 0;
+	preCount = 0;
 }
 
 
@@ -53,10 +51,6 @@ void PointCloudHandler::execute(const alice_msgs::pointcloudfunctionGoalConstPtr
 	d_pc_sub = d_nh.subscribe<sensor_msgs::PointCloud2>("front_xtion/depth_registered/points", 1, &PointCloudHandler::pcCallback, this);
 //	d_pc_sub = d_nh.subscribe<const sensor_msgs::PointCloud>("camera/depth_registered/points", 1, &PointCloudHandler::pcCallback, this);
 
-	ros::Rate r(50);
-
-	while (!d_done)
-		r.sleep();
 }
 
 void PointCloudHandler::shutdownSubcriber()
@@ -80,7 +74,7 @@ bool PointCloudHandler::getPlane(PCLPointCloudPtr &pointcloud, PCLPointCloudPtr 
 	seg.setInputCloud(pointcloud);
 	seg.segment(*inliers, *coefficients);
 
-	size_t minPointsInPlane = 4000;
+	size_t minPointsInPlane = 5000;
 
 	if (inliers->indices.size() < minPointsInPlane)
 		return false;
@@ -110,20 +104,38 @@ void PointCloudHandler::transformPC(PCLPointCloudPtr &cloud, string transformTo)
 
 void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloudMsg)
 {
+	if (preCount < 60)
+	{
+		++preCount;
+		return;
+	}
 	// transform the point cloud to mico base link...
 
 	string transformTo = "/mico_base_link";
 
-	if (!d_detectObjects && !d_detectEmptyShelf)
+	if (!d_detectObjects)
 		transformTo = "/base_link";
 
-	tfTransformer.waitForTransform(transformTo, "/front_xtion_link", ros::Time::now(), ros::Duration(0.1));
+	ros::Time now = ros::Time::now();
+	tfTransformer.waitForTransform(transformTo, "/front_xtion_link", now, ros::Duration(0.1));
 
 	if (!tfTransformer.canTransform(transformTo, cloudMsg->header.frame_id, cloudMsg->header.stamp))
 	{
 		ROS_INFO_STREAM("No transform found");
 		return;
 	}
+	/*
+	tf::StampedTransform xtion_tf;
+	tfTransformer.lookupTransform(transformTo, "/front_xtion_link", now, xtion_tf);
+	std::fstream logger;
+	logger.open("/home/borg/log.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+
+	tf::Matrix3x3 euler(xtion_tf.getRotation());
+	double roll, pitch, yaw;
+	euler.getRPY(roll, pitch, yaw);
+	logger << "Roll: "<< roll << " Pitch: " << pitch   << " Yaw: " << yaw << '\n';
+	logger.close();
+	*/
 
 	PCLPointCloudPtr pointcloud(new PCLPointCloud);
 	sensor_msgs::PointCloud2 cloudMsg_transformed;
@@ -135,12 +147,13 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 	passthrough_filter.setInputCloud(pointcloud);
 	passthrough_filter.setFilterFieldName("z");
 
-	if (d_detectObjects || d_detectEmptyShelf)
-		passthrough_filter.setFilterLimits(-0.1, 2.0); // Might need to change this!
+	if (d_detectObjects)
+		passthrough_filter.setFilterLimits(-0.6, 2.0); // Might need to change this!
 	else
-		passthrough_filter.setFilterLimits(-0.1, 2.0); // Might need to change this!
+		passthrough_filter.setFilterLimits(0.0, 4.0); // Might need to change this!
 
 	passthrough_filter.filter(*pointcloud);
+
 
 	PCLPointCloudPtr voxelCloud(new PCLPointCloud);
 	VoxelGrid<Point> voxel;
@@ -169,7 +182,7 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 				break;
 			}
 
-			transformPC(planeCloud, transformTo);
+		//	transformPC(planeCloud, transformTo);
 
 			Point minPt, maxPt;
 			getMinMax3D(*planeCloud, minPt, maxPt);
@@ -201,8 +214,14 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 
 		}
 
-        if (vPlanes.size() == 0)
-            return;
+
+		if (failCounter < 10)
+			if (vPlanes.size() == 0)
+			{
+				++failCounter;
+				return;
+			}
+
 		plane_pub.publish(planesCloud);
 
 		alice_msgs::PcPlane pcPlane;
@@ -210,15 +229,8 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 		v_plane_pub.publish(pcPlane);
 
 		if (d_detectObjects)
-		{
-			sensor_msgs::PointCloud2 sensorCloud1;
-			toROSMsg(*objectCloud, sensorCloud1);
-			object_pub.publish(sensorCloud1);
-		}
+			object_pub.publish(objectCloud);
 
-
-		as.setSucceeded();
-		d_done = true;
 		shutdownSubcriber();
 		return;
 	}
@@ -272,15 +284,13 @@ void PointCloudHandler::pcCallback(const sensor_msgs::PointCloud2ConstPtr &cloud
 				location.maxY = maxPt.y;
 				location.maxZ = maxPt.z;
 
-				d_result.object = location;
-				//vLocations.push_back(location);
+				vLocations.push_back(location);
 			}
 		}
 
-		//d_result.object = vLocations;
+		d_result.object = vLocations;
 		as.setSucceeded(d_result);
 		shutdownSubcriber();
-		d_done = true;
 		return;
 	}
 
