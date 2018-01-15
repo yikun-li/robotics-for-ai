@@ -26,7 +26,7 @@ class ApproachTable_x(basebehavior.behaviorimplementation.BehaviorImplementation
     
         elif (self.state == "send"):
             goal = aliceapproachGoal();
-            goal.plane = True;
+            goal.plane = False;
             
             self.client.send_goal(goal);
             self.state = "wait";
