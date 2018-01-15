@@ -1,0 +1,5 @@
+<launch>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_to_xtion" args="0 0 1.4 0 0.7 0 /base_link /front_xtion_link 100"/> 
+	<node pkg="tf" type="static_transform_publisher" name="base_to_mico" args="0 0 0.5 1.57079633 0 0  /base_link /mico_base_link 100"/> 
+</launch>
