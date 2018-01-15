@@ -110,8 +110,7 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-add_executable(alice_approach_node src/alice_approach_node.cpp src/AliceApproach/aliceapproach.cc
-                                    src/AliceApproach/approachSideways.cc)
+add_executable(alice_approach_node src/alice_approach_node.cpp src/AliceApproach/aliceapproach.cc)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

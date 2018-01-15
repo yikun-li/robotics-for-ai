@@ -14,7 +14,6 @@ class ApproachTable_x(basebehavior.behaviorimplementation.BehaviorImplementation
         self.client = actionlib.SimpleActionClient("aliceapproach", aliceapproachAction);
         
         self.state = "connect";
-
         
 
     def implementation_update(self):

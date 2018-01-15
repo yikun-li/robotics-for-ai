@@ -16,12 +16,10 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/segmentation/sac_segmentation.h>
-#include <pcl_ros/segmentation/extract_clusters.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl_ros/transforms.h>
 #include <pcl/filters/passthrough.h>
 #include <pcl/kdtree/kdtree_flann.h>
-#include <pcl/filters/project_inliers.h>
 
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
