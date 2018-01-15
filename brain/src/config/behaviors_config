@@ -23,3 +23,7 @@ postcondition = False
 description = ""
 postcondition = False
 
+[approach_table]
+description = "Alice will approach a table with objects on it"
+postcondition = False
+
