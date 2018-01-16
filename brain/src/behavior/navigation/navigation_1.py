@@ -42,26 +42,31 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
     def implementation_update(self):
         if (self.stuck.is_failed() or self.goto.is_failed()) and self.state.startswith('go_to'):
             print("Alice stuck!!!")
+            print('level 1')
             self.state_back_up = self.state
             self.state = 'level1_recovery'
             self.closest_points = self.get_closest_all_level_recovery_points(num=5)
+            print(self.closest_points)
             self.current_recovery_point = self.closest_points.pop(0)
             self.set_goal(self.current_recovery_point)
             self.stuck = self.ab.sublabnavigation({})
 
         elif self.state == 'level1_recovery' and self.check_if_close_to_the_goal(goal=self.current_recovery_point):
             self.state = 'level2_recovery'
+            print('level 2')
             self.closest_l2_points = self.get_closest_all_level_recovery_points(start=self.depart_point,
                                                                                 aim=self.aim_point, num=2)
-            random.shuffle(self.closest_l2_points)
-            self.set_goal(self.closest_l2_points.pop(0))
+            # random.shuffle(self.closest_l2_points)
+            print(self.closest_l2_points)
+            self.set_goal(self.closest_l2_points.pop())
 
         elif self.state == 'level1_recovery' and (self.goto.is_failed() or self.stuck.is_failed()):
             self.stuck = self.ab.sublabnavigation({})
-            if len(self.closest_points) == 0:
+            if len(self.closest_points) != 0:
                 self.current_recovery_point = self.closest_points.pop(0)
                 self.set_goal(self.current_recovery_point)
             else:
+                print('stuck')
                 self.state = 'stuck'
                 x = random.randint(0, 2)
                 y = random.randint(0, 2)
@@ -75,8 +80,9 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         elif self.state == 'level2_recovery' and (self.goto.is_failed() or self.stuck.is_failed()):
             self.stuck = self.ab.sublabnavigation({})
             if len(self.closest_l2_points) != 0:
-                self.set_goal(self.closest_l2_points.pop(0))
+                self.set_goal(self.closest_l2_points.pop())
             else:
+                print('stuck')
                 self.state = 'stuck'
                 x = random.randint(0, 2)
                 y = random.randint(0, 2)
@@ -146,13 +152,19 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         if goal:
             distance = math.pow((self.storedLocations[goal]['x'] - trans[0]), 2) + math.pow(
                 (self.storedLocations[goal]['y'] - trans[1]), 2)
+
+            if distance <= 0.2:
+                return True
+            else:
+                return False
+
         else:
             distance = math.pow((x - trans[0]), 2) + math.pow((y - trans[1]), 2)
 
-        if distance <= 0.5:
-            return True
-        else:
-            return False
+            if distance <= 0.5:
+                return True
+            else:
+                return False
 
     def get_closest_all_level_recovery_points(self, start=-1, aim=-1, num=3):
         self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
@@ -165,7 +177,10 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
                     dict_distance[i] = math.pow((self.storedLocations[i]['x'] - trans[0]), 2) + math.pow(
                         (self.storedLocations[i]['y'] - trans[1]), 2)
             else:
-                way = int(math.ceil((start + aim) / 2.0))
+                if start == 0:
+                    way = 0
+                else:
+                    way = int(math.ceil((start + aim) / 2.0))
                 if i.startswith('recovery_l2_w' + str(way)):
                     dict_distance[i] = math.pow((self.storedLocations[i]['x'] - trans[0]), 2) + math.pow(
                         (self.storedLocations[i]['y'] - trans[1]), 2)
