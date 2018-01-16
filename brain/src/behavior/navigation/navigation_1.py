@@ -68,8 +68,8 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             else:
                 print('stuck')
                 self.state = 'stuck'
-                x = random.randint(0, 2)
-                y = random.randint(0, 2)
+                x = random.random() - 0.5
+                y = random.random() - 0.5
                 self.stuck_position = self.find_behind_point(x, y)
                 self.set_goal(self.stuck_position)
 
