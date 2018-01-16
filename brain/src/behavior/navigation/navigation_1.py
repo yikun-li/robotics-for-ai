@@ -153,7 +153,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             distance = math.pow((self.storedLocations[goal]['x'] - trans[0]), 2) + math.pow(
                 (self.storedLocations[goal]['y'] - trans[1]), 2)
 
-            if distance <= 0.2:
+            if distance <= 0.15:
                 return True
             else:
                 return False
