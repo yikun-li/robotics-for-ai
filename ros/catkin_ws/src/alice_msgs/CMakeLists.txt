@@ -50,6 +50,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    Location.msg
    PcPlane.msg
+   ROI.msg
    #EEFPosition.msg
    #EEFPositionFingers.msg
 )
