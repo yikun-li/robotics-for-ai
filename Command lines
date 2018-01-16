@@ -7,3 +7,7 @@ roslaunch alice_nav_sim alice_nav_lab.launch
 rviz
 
 
+roscd head_controller/scripts
+python tf_publisher_simulation.py
+python headControllerSimulation.py
+

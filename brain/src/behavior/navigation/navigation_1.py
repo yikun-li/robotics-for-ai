@@ -40,7 +40,6 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
     def implementation_update(self):
         if self.stuck.is_failed() and (self.state.startswith('go_to') or self.state == 'stuck'):
             print("Alice stuck!!!")
-
             if not self.state == 'stuck':
                 self.state_back_up = self.state
                 self.state = 'stuck'
@@ -52,12 +51,15 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
                 self.stuck_position = self.find_behind_point(x, y)
                 self.set_goal(self.stuck_position)
             self.stuck = self.ab.sublabnavigation({})
-
         # elif self.state == 'stuck' and self.goto.is_finished():
         elif self.state == 'stuck' and self.check_if_close_to_the_goal(x=self.stuck_position['x'],
                                                                        y=self.stuck_position['y']):
             self.state = self.state_back_up
             self.set_goal(self.waypoint[self.aim_point])
+
+        if self.goto.is_failed():
+            self.set_goal(self.waypoint[self.aim_point])
+            self.startNavigating = True
 
         if self.state == 'enter':
             self.state = 'go_to_hall'
@@ -72,18 +74,10 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             self.body.say('I am navigating')
             self.set_goal(self.waypoint[self.aim_point])
 
-        # elif self.state == 'go_to_hall' and self.goto.is_failed():
-        #     self.set_goal(self.waypoint[1])
-
         elif self.state == 'go_to_way' and self.goto.is_finished():
             self.time = rospy.Time.now()
             self.state = 'wait3'
             self.body.say('I have arrived')
-
-        # elif self.state == 'go_to_way' and self.goto.is_failed():
-        #     self.set_goal(self.waypoint[0])
-        #     self.body.say('I failed')
-        #     self.body.say('I am navigating')
 
         elif self.state == 'wait3' and rospy.Time.now() - self.time > rospy.Duration(3):
             self.state = 'go_to_arena'
@@ -95,10 +89,6 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             self.time = rospy.Time.now()
             self.state = 'wait5'
             self.body.say('I have arrived')
-
-        # elif self.state == 'go_to_arena' and self.goto.is_failed():
-        #     self.set_goal(self.waypoint[2])
-        #     self.body.say('I failed')
 
         elif self.state == 'wait5' and rospy.Time.now() - self.time > rospy.Duration(5):
             self.state = 'go_to_way2'
@@ -133,7 +123,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             return False
 
     def set_goal(self, goal):
-        self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': -1})
+        self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': 0.03})
 
     def read_stored_locations(self, fileName):
         """ Read file with stored locations during navigation training """
