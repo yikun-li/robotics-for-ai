@@ -2,6 +2,11 @@ python ./basebehavior/generate_behaviors.py
 
 ./start.sh config/config_lab_nav
 
+roslaunch alice_gazebo robotlab.launch
 roslaunch alice_nav_sim alice_nav_lab.launch
+rviz
 
+roscd head_controller/scripts
+python tf_publisher_simulation.py
+python headControllerSimulation.py
 
