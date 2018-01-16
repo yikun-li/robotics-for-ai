@@ -35,5 +35,5 @@ recovery_l2_w1_p2,5,4.3,-90
 recovery_l2_w1_p3,-4.4,1.6,90
 recovery_l2_w1_p4,5,1.6,90
 recovery_l2_w2_p5,0,0.3,-90
-recovery_l2_w3_p6,0,-4.5,90
-recovery_l2_w3_p7,3.9,-4.7,90
+recovery_l2_w2_p6,0,-4.5,90
+recovery_l2_w2_p7,3.9,-4.7,90

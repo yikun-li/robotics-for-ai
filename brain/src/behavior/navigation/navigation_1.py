@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import math
+import operator
 import os
 import random
 
@@ -14,6 +15,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_init(self):
         self.waypoint = ['hallway1', 'waypoint1', 'arena1']
+        self.depart_point = -1
         self.aim_point = -1
         self.state_back_up = None
         self.stuck_position = None
@@ -38,31 +40,57 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.transform = tf.TransformListener()
 
     def implementation_update(self):
-        if self.stuck.is_failed() and (self.state.startswith('go_to') or self.state == 'stuck'):
+        if (self.stuck.is_failed() or self.goto.is_failed()) and self.state.startswith('go_to'):
             print("Alice stuck!!!")
-            if not self.state == 'stuck':
-                self.state_back_up = self.state
-                self.state = 'stuck'
-                self.stuck_position = self.find_behind_point()
-                self.set_goal(self.stuck_position)
+            self.state_back_up = self.state
+            self.state = 'level1_recovery'
+            self.closest_points = self.get_closest_all_level_recovery_points(num=5)
+            self.current_recovery_point = self.closest_points.pop(0)
+            self.set_goal(self.current_recovery_point)
+            self.stuck = self.ab.sublabnavigation({})
+
+        elif self.state == 'level1_recovery' and self.check_if_close_to_the_goal(goal=self.current_recovery_point):
+            self.state = 'level2_recovery'
+            self.closest_l2_points = self.get_closest_all_level_recovery_points(start=self.depart_point,
+                                                                                aim=self.aim_point, num=2)
+            random.shuffle(self.closest_l2_points)
+            self.set_goal(self.closest_l2_points.pop(0))
+
+        elif self.state == 'level1_recovery' and (self.goto.is_failed() or self.stuck.is_failed()):
+            self.stuck = self.ab.sublabnavigation({})
+            if len(self.closest_points) == 0:
+                self.current_recovery_point = self.closest_points.pop(0)
+                self.set_goal(self.current_recovery_point)
             else:
+                self.state = 'stuck'
                 x = random.randint(0, 2)
                 y = random.randint(0, 2)
                 self.stuck_position = self.find_behind_point(x, y)
                 self.set_goal(self.stuck_position)
+
+        elif self.state == 'level2_recovery' and self.goto.is_finished():
+            self.state = self.state_back_up
+            self.set_goal(self.waypoint[self.aim_point])
+
+        elif self.state == 'level2_recovery' and (self.goto.is_failed() or self.stuck.is_failed()):
             self.stuck = self.ab.sublabnavigation({})
-        # elif self.state == 'stuck' and self.goto.is_finished():
+            if len(self.closest_l2_points) != 0:
+                self.set_goal(self.closest_l2_points.pop(0))
+            else:
+                self.state = 'stuck'
+                x = random.randint(0, 2)
+                y = random.randint(0, 2)
+                self.stuck_position = self.find_behind_point(x, y)
+                self.set_goal(self.stuck_position)
+
         elif self.state == 'stuck' and self.check_if_close_to_the_goal(x=self.stuck_position['x'],
                                                                        y=self.stuck_position['y']):
             self.state = self.state_back_up
             self.set_goal(self.waypoint[self.aim_point])
 
-        if self.goto.is_failed():
-            self.set_goal(self.waypoint[self.aim_point])
-            self.startNavigating = True
-
         if self.state == 'enter':
             self.state = 'go_to_hall'
+            self.depart_point = 0
             self.aim_point = 0
             self.set_goal(self.waypoint[self.aim_point])
             self.startNavigating = True
@@ -70,6 +98,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'go_to_hall' and self.goto.is_finished():
             self.state = 'go_to_way'
+            self.depart_point = 0
             self.aim_point = 1
             self.body.say('I am navigating')
             self.set_goal(self.waypoint[self.aim_point])
@@ -81,6 +110,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'wait3' and rospy.Time.now() - self.time > rospy.Duration(3):
             self.state = 'go_to_arena'
+            self.depart_point = 1
             self.aim_point = 2
             self.body.say('I am navigating')
             self.set_goal(self.waypoint[self.aim_point])
@@ -92,12 +122,14 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'wait5' and rospy.Time.now() - self.time > rospy.Duration(5):
             self.state = 'go_to_way2'
+            self.depart_point = 2
             self.aim_point = 1
             self.set_goal(self.waypoint[self.aim_point])
             self.body.say('I am navigating')
 
         elif self.state == 'go_to_way2' and self.check_if_close_to_the_goal(self.waypoint[1]):
             self.state = 'go_to_hall2'
+            self.depart_point = 1
             self.aim_point = 0
             self.set_goal(self.waypoint[self.aim_point])
             self.startNavigating = True
@@ -121,6 +153,33 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             return True
         else:
             return False
+
+    def get_closest_all_level_recovery_points(self, start=-1, aim=-1, num=3):
+        self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
+        trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
+
+        dict_distance = {}
+        for i in self.storedLocations:
+            if start == -1 or aim == -1:
+                if i.startswith('recovery'):
+                    dict_distance[i] = math.pow((self.storedLocations[i]['x'] - trans[0]), 2) + math.pow(
+                        (self.storedLocations[i]['y'] - trans[1]), 2)
+            else:
+                way = int(math.ceil((start + aim) / 2.0))
+                if i.startswith('recovery_l2_w' + str(way)):
+                    dict_distance[i] = math.pow((self.storedLocations[i]['x'] - trans[0]), 2) + math.pow(
+                        (self.storedLocations[i]['y'] - trans[1]), 2)
+
+        sorted_dis = sorted(dict_distance.items(), key=operator.itemgetter(1))
+
+        ind = 1
+        points = []
+        for key in sorted_dis:
+            if ind > num:
+                break
+            ind += 1
+            points.append(key[0])
+        return points
 
     def set_goal(self, goal):
         self.goto = self.ab.gotowrapper({'goal': goal, 'error_range': 0.03})
