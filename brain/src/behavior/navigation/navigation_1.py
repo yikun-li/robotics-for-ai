@@ -14,7 +14,7 @@ from geometry_msgs.msg import PoseStamped
 class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
     def implementation_init(self):
-        self.waypoint = ['hallway1', 'waypoint1', 'arena1']
+        self.waypoint = ['1hallway', '1waypoint', '1arena']
         self.depart_point = -1
         self.aim_point = -1
         self.state_back_up = None
