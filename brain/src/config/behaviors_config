@@ -27,3 +27,10 @@ postcondition = False
 description = "Alice will approach a table with objects on it"
 postcondition = False
 
+[sub_lab_navigation]
+description = ""
+postcondition = False
+
+[navigation]
+description = ""
+postcondition = False
