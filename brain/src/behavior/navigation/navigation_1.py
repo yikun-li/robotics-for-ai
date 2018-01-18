@@ -40,10 +40,24 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
         self.transform = tf.TransformListener()
 
     def implementation_update(self):
-        if (self.stuck.is_failed() or self.goto.is_failed()) and self.state.startswith('go_to'):
+        if self.state == 'go_to_arena' and (self.stuck.is_failed() or self.goto.is_failed()):
+            print('Wait for 5s')
+            self.state = 'stuck_wait'
+            self.time = rospy.Time.now()
+            self.set_goal(None)
+
+        elif self.state == 'stuck_wait' and rospy.Time.now() - self.time > rospy.Duration(5):
+            self.state = 'recovery'
+
+        if ((self.stuck.is_failed() or self.goto.is_failed()) and self.state.startswith(
+                'go_to')) or self.state == 'recovery':
             print("Alice stuck!!!")
             print('level 1')
-            self.state_back_up = self.state
+            if self.state == 'recovery':
+                self.state_back_up = 'go_to_arena'
+            else:
+                self.state_back_up = self.state
+
             self.state = 'level1_recovery'
             self.closest_points = self.get_closest_all_level_recovery_points(num=5)
             print(self.closest_points)
@@ -153,7 +167,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             distance = math.pow((self.storedLocations[goal]['x'] - trans[0]), 2) + math.pow(
                 (self.storedLocations[goal]['y'] - trans[1]), 2)
 
-            if distance <= 0.15:
+            if distance <= 0.2:
                 return True
             else:
                 return False
