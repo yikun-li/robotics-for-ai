@@ -192,7 +192,7 @@ class Speechrecognizer(threading.Thread):
                         result = self.decoder.hyp().hypstr
                         print "[SpRec-kin]",result
                         self.obs['result'] = result
-                        self.obs['recogtime'] = time.time()
+                        self.obs['recogtime'] = rospy.Time.now()
                         self.obs['azimuth'] = dat['azimuth']
                         self.obs['2best'] = self.get2best(self.decoder)
 
@@ -304,7 +304,7 @@ class Speechrecognizer(threading.Thread):
                                 result = self.decoder.hyp().hypstr
                                 print "[SpRec-wav]",result
                                 self.obs['result'] = result
-                                self.obs['recogtime'] = time.time()
+                                self.obs['recogtime'] = rospy.Time.now()
                                 self.obs['azimuth'] = dat['azimuth']
                                 self.obs['2best'] = self.get2best(self.decoder)
 
@@ -342,7 +342,7 @@ class Speechrecognizer(threading.Thread):
                                 result = self.decoder.hyp().hypstr
                                 print "[SpRec-mic]",result
                                 self.obs['result'] = result
-                                self.obs['recogtime'] = time.time()
+                                self.obs['recogtime'] = rospy.Time.now()
                                 self.obs['2best'] = self.get2best(self.decoder)
 
 class  SpeechRos(object):
@@ -351,8 +351,8 @@ class  SpeechRos(object):
 
         self.m_write            = rospy.ServiceProxy('memory', MemorySrv)
         self.m_read             = rospy.ServiceProxy('memory_read', MemoryReadSrv)
-        self.last_obs           = time.time()
-        self.last_question_time = time.time()
+        self.last_obs           = rospy.Time.now()
+        self.last_question_time = rospy.Time.now()
         self.possible_answers   = None
         self.new_obs            = {'result' : None, 'azimuth': None ,'recogtime': None}
         
@@ -418,19 +418,19 @@ class  SpeechRos(object):
     def send_to_memory(self,send_obs):
         
         try:
-            self.m_write(rospy.Time(time.time()), "voice_command", json.dumps(send_obs))
+            self.m_write(rospy.Time.now(), "voice_command", json.dumps(send_obs))
         except rospy.service.ServiceException:
             print "could not send to memory, is behavior running?"
 
     def need_to_ask_question(self):
         
         try:
-            result = self.m_read('get_last_observation',rospy.Time(time.time()),'ask_question','')
+            result = self.m_read('get_last_observation',rospy.Time.now(),'ask_question','')
             result = json.loads(result.json)
         except rospy.service.ServiceException:
             result = None
         if result and (result['time'] > self.last_question_time):
-            self.last_question_time = time.time()
+            self.last_question_time = rospy.Time.now()
             self.asking = True
             self.possible_answers = result['answers']
             return True
@@ -441,14 +441,14 @@ class  SpeechRos(object):
         tmp = self.pause
         self.pause = False
         try: 
-            result = self.m_read('get_last_observation',rospy.Time(time.time()),'body_say','')
+            result = self.m_read('get_last_observation',rospy.Time.now(),'body_say','')
             result = json.loads(result.json)
         except rospy.service.ServiceException:
             result = None            
         if result:
             string_length = len(result['text'])
             duration = result['duration']
-            if (result['time'] + 0.5 + float(duration)) > time.time():
+            if (result['time'] + rospy.Duration(0.5) + rospy.Duration(float(duration))) > rospy.Time.now():
                 self.pause = True
         if self.rempause: self.pause = True
         if tmp == False and self.pause == True:
