@@ -42,3 +42,7 @@ postcondition = False
 [sub_object_recognition]
 description = ""
 postcondition = False
+
+[navigation]
+description = ""
+postcondition = False
