@@ -456,7 +456,7 @@ void AliceApproach::cbCloud(const sensor_msgs::PointCloud2ConstPtr &cloudMsg)
 	passthrough_filter.setInputCloud(pointcloud);
 	passthrough_filter.setFilterFieldName("z");
 	passthrough_filter.setFilterLimits(0.50, 0.9);
-	passthrough_filter.filter(*pointcloud);
+	//passthrough_filter.filter(*pointcloud);
 
 	passthrough_filter.setInputCloud(pointcloud);
 	passthrough_filter.setFilterFieldName("x");

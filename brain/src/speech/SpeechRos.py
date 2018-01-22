@@ -448,7 +448,7 @@ class  SpeechRos(object):
         if result:
             string_length = len(result['text'])
             duration = result['duration']
-            if (result['time'] + rospy.Duration(0.5) + rospy.Duration(float(duration))) > rospy.Time.now():
+            if (rospy.Time(result['time']) + rospy.Duration(0.5) + rospy.Duration(float(duration))) > rospy.Time.now():
                 self.pause = True
         if self.rempause: self.pause = True
         if tmp == False and self.pause == True:
