@@ -29,13 +29,13 @@ class SubLabNavigation_x(basebehavior.behaviorimplementation.BehaviorImplementat
         self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
         trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
 
-        if len(self.history) <= 200:
+        if len(self.history) <= 260:
             return False
 
         sum_dis = 0
         for i in range(1, 3):
-            sum_dis += math.pow((self.history[-i * 100][0] - trans[0]), 2) + math.pow(
-                (self.history[-i * 100][1] - trans[1]), 2)
+            sum_dis += math.pow((self.history[-i * 130][0] - trans[0]), 2) + math.pow(
+                (self.history[-i * 130][1] - trans[1]), 2)
 
         if sum_dis < 0.6:
             return True
