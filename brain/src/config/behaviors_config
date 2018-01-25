@@ -46,3 +46,12 @@ postcondition = False
 [navigation]
 description = ""
 postcondition = False
+
+[table_navigation]
+description = ""
+postcondition = False
+
+[speech_top_level]
+description = ""
+postcondition = False
+

@@ -1,5 +1,5 @@
 [general]
-starting_behavior = speechuncertainty({})
+starting_behavior = speechtoplevel({})
 
 [body]
 number_of_naos = 0

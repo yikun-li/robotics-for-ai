@@ -1,0 +1,16 @@
+#JSGF v1.0;
+
+grammar vcc;
+
+public <all> = <command> ( <location> | <find_object>);
+
+<command> = [Alice] goto;
+
+<location> = table one | table two | table one ( and | or )  table two;
+
+<find_object> = and find [the] <object>;
+
+<object> = ( chips | coca-cola | yellow container | salt | tomato soup | fanta | aadrink | chicken soup | shampoo | eraserbox | all objects );
+
+
+
