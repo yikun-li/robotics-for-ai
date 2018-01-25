@@ -41,10 +41,10 @@ recovery_l2_w2_p7,0,2.2,45
 1recovery_l2_w2_p6,0,-4.5,90
 1recovery_l2_w2_p7,0,2.2,90
 
+final_demo_recovery1,1.5,-4.9,0
+final_demo_recovery2,1.8,-4.6,0
+final_demo_recovery3,3.4,-3.3,0
+final_demo_recovery4,3.4,-2.2,0
 start,-0.13,-3.23,-88
-recovery1,1.5,-4.9,0
-recovery2,1.8,-4.6,0
-recovery3,3.4,-3.3,0
-recovery4,3.4,-2.2,0
 table1,4.2,-2.5,0
 table2,3.3,-4.2,-88

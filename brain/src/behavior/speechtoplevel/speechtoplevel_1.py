@@ -23,8 +23,37 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.locations = self.grammar.findVariableItems("<location>", includeVars=False)
         self.objects = self.grammar.findVariableItems("<object>", includeVars=False)
 
+        self.navigate = self.ab.tablenavigation({'aim': None})
+        self.startNavigate = False
+        self.selected_behaviors = [("navigate", "self.startNavigate == True")]
+
     def implementation_update(self):
         self.update_last_speech_command()
+
+        if self.state == 'all_objects':
+            self.navigate = self.ab.tablenavigation({'aim': 'table1'})
+            self.startNavigate = True
+            self.state = 'ant1'
+
+        elif self.state == 'ant1' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': 'table1'})
+
+        elif self.state == 'ant1' and self.navigate.is_finished():
+            self.navigate = self.ab.tablenavigation({'aim': 'table2'})
+            self.state = 'ant2'
+
+        elif self.state == 'ant2' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': 'table2'})
+
+        elif self.state == 'ant2' and self.navigate.is_finished():
+            self.navigate = self.ab.tablenavigation({'aim': 'start'})
+            self.state = 'start'
+
+        elif self.state == 'start' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': 'start'})
+
+        elif self.state == 'start' and self.navigate.is_finished():
+            self.state = 'idle'
 
         if self.new_speech_obs:
             msg_opts_removed = self.remove_opts(self.last_speech_obs['message'])
@@ -38,12 +67,22 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
                 if len(locations) == 2 and len(objects) == 1:
                     if 'table one' in locations and 'table two' in locations and 'all objects' in objects:
                         self.body.say('I will go to table one and table two and find all objects')
+                        self.state = 'all_objects'
+                    else:
+                        self.body.say('Invalid command! Please give a new command.')
 
-                if len(locations) == 1 and len(objects) == 1:
+                elif len(locations) == 1 and len(objects) == 1:
                     if 'table one' in locations and 'all objects' not in objects:
                         self.body.say('I will go to table one and find ' + objects[0])
+                        self.state = 'table1'
                     elif 'table two' in locations and 'all objects' not in objects:
                         self.body.say('I will go to table two and find ' + objects[0])
+                        self.state = 'table2'
+                    else:
+                        self.body.say('Invalid command! Please give a new command.')
+
+                else:
+                    self.body.say('Invalid command! Please give a new command.')
 
     # remove words that are between []'s
     def remove_opts(self, hypstr):
