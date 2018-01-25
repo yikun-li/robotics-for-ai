@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import rospy
 import tensorflow as tf
+import os
 from alice_msgs.msg import *
 from cv_bridge import CvBridge, CvBridgeError
 from recognition_server.msg import *
@@ -26,11 +27,11 @@ class RService:
 
         self.bridge = CvBridge()  # Use CvBridge for converting
         self.image = rospy.wait_for_message("/front_xtion/rgb/image_raw", Image)
-        self.labelPath = '/home/student/dataset/labels.txt'
+        # self.labelPath = '/home/student/dataset/labels.txt'
 
         # load neural network and labels for Google Neural Network
-        self.labels = self.read_labels("./inception/tmp/output_labels.txt")
-        self.sess = self.loadNetwork("./inception/tmp/output_graph.pb")
+        self.labels = self.read_labels(os.environ['BORG'] + "/ros/ckpt/output_labels.txt")
+        self.sess = self.loadNetwork(os.environ['BORG'] + "/ros/ckpt/output_graph.pb")
 
         self.action_server = actionlib.SimpleActionServer("image_server", ProcessAction, self.callback, False)
         self.action_server.start()
@@ -38,10 +39,10 @@ class RService:
         self.height = 32
         self.width = 32
         self.nClasses = 10
-        self.CHECKPOINT_DIR = "./ckpt/network.ckpt"
 
-        self.network = Network()
-        self.network.load_checkpoint(self.CHECKPOINT_DIR)
+        # self.CHECKPOINT_DIR = "./ckpt/network.ckpt"
+        # self.network = Network()
+        # self.network.load_checkpoint(self.CHECKPOINT_DIR)
 
         self.list_label = [
             'Fanta',
@@ -64,7 +65,7 @@ class RService:
 
         # receiving image here
         self.image = rospy.wait_for_message("/front_xtion/rgb/image_raw", Image)
-        self.labelPath = '/home/student/dataset/labels.txt'
+        # self.labelPath = '/home/student/dataset/labels.txt'
         rgb_image = self.convert_image_cv(self.image, state=rec.state)
 
         goal = ObjectROIGoal()  # Create a goal message
@@ -84,11 +85,17 @@ class RService:
             print('It most likely could not find any objects!')
             return
 
+        list_objects = []
+
         for i in range(len(ROIs)):
             top = ROIs[i].top
             bottom = ROIs[i].bottom
             left = ROIs[i].left
             right = ROIs[i].right
+            # print('top', top)
+            # print('bottom', bottom)
+            # print('left', left)
+            # print('right', right)
 
             height = bottom - top
             width = right - left
@@ -102,55 +109,64 @@ class RService:
             else:
                 padding1 += (width - height) / 2
 
-            obj = rgb_image[ROIs[i].top - padding1: ROIs[i].bottom + padding1,
-                  ROIs[i].left - padding2: ROIs[i].right + padding2]
+            # obj = rgb_image[ROIs[i].top - padding1: ROIs[i].bottom + padding1,
+            #       ROIs[i].left - padding2: ROIs[i].right + padding2]
             # obj = rgb_image[ROIs[i].top - padding:ROIs[i].bottom + padding,
-            #       ROIs[i].left - padding:ROIs[i].right + padding]
+            #       ROIs[i].lROIs[i].top - padding1: ROIs[i].bottom + padding1,
 
+            new_top = ROIs[i].top - padding1
+            new_bottom = ROIs[i].bottom + padding1
+            new_left = ROIs[i].left - padding2
+            new_right = ROIs[i].right + padding2
+
+            new_top = new_top if new_top >= 0 else 0
+            new_bottom = new_bottom if new_bottom >= 0 else 0
+            new_left = new_left if new_left >= 0 else 0
+            new_right = new_right if new_right >= 0 else 0
+
+            obj = rgb_image[new_top: new_bottom, new_left: new_right]
+
+            cv_image = self.bridge.imgmsg_to_cv2(self.image, 'bgr8')  # use "bgr8" if its a color image
+            rgb_obj = cv_image[new_top: new_bottom, new_left: new_right]
+            cv2.imshow('image', rgb_obj)
+            cv2.waitKey(1000)
+            cv2.destroyAllWindows()
             # data = obj.astype('float')
             # data /= 255
-
             result, labIdx = -1, -1
 
             if rec.state == 1:
                 i = self.preprocess(obj)
-                result = self.network.feed_batch(i)
+                # result = self.network.feed_batch(i)
                 # print(result)
-                print('Object: ', self.list_label[int(np.argmax(result))])
+                # print('Object: ', self.list_label[int(np.argmax(result))])
 
-                self.count += 1
-                if int(np.argmax(result)) == 7:
-                    self.success += 1
-                print('Rate: ' + str(float(self.success) / float(self.count)))
+                # self.count += 1
+                # if int(np.argmax(result)) == 7:
+                #     self.success += 1
+                # print('Rate: ' + str(float(self.success) / float(self.count)))
 
             elif rec.state == 2:
                 i = self.preprocess_g(obj)
                 out, labIdx = self.run_inference_on_image(i)
-
-                self.count += 1
-                if labIdx == 1:
-                    self.success += 1
-                print('Rate: ' + str(float(self.success) / float(self.count)))
+                list_objects.append(self.labels[labIdx])
 
             else:
                 self.action_server.set_aborted('Input parameter is wrong!')
                 return
 
-            cv2.imshow('image', obj)
-            cv2.waitKey(1000)
-            cv2.destroyAllWindows()
-
-            try:
-                rtn = ProcessResult()
-                if rec.state == 1:
-                    rtn.obj = self.list_label[int(np.argmax(result))]
-                elif rec.state == 2:
-                    rtn.obj = self.labels[labIdx]
-                rtn.result = '{0:.2f}'.format(100 * float(self.success) / float(self.count))
-                self.action_server.set_succeeded(rtn)
-                return
-            except Exception as e:
-                print(e)
+        try:
+            rtn = ProcessResult()
+            if rec.state == 1:
+                pass
+                # rtn.obj = self.list_label[int(np.argmax(result))]
+            elif rec.state == 2:
+                rtn.obj = '|'.join(list_objects)
+            rtn.result = ''
+            self.action_server.set_succeeded(rtn)
+            return
+        except Exception as e:
+            print(e)
 
         rtn = ProcessResult()
         rtn.obj = 'Did not find the object!'
@@ -209,7 +225,7 @@ class RService:
         predictions = np.squeeze(predictions)  # make sure output dims are correct
         #    print predictions
         norm = predictions / np.sqrt(predictions.dot(predictions))  # normalize output data (make softmax out of it)
-        print("out: ", norm, " label = ", np.argmax(norm))
+        # print("out: ", norm, " label = ", np.argmax(norm))
         return norm, np.argmax(norm)
 
 
