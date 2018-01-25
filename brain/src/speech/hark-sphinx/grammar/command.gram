@@ -2,11 +2,13 @@
 
 grammar vcc;
 
-public <all> = <command> ( <location> | <find_object>);
+public <all> = <command> <locations> <find_object>;
 
 <command> = [Alice] goto;
 
-<location> = table one | table two | table one ( and | or )  table two;
+<locations> = <location> | <location> [and|or] <location>;
+
+<location> = table one | table two;
 
 <find_object> = and find [the] <object>;
 
