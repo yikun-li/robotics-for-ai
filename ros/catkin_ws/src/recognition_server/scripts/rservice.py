@@ -5,6 +5,7 @@ import actionlib
 import cv2
 import numpy as np
 import rospy
+import time
 import tensorflow as tf
 import os
 from alice_msgs.msg import *
@@ -86,6 +87,10 @@ class RService:
             return
 
         list_objects = []
+        list_confidence = []
+        list_scanned_objects = []
+        if ROIs is None:
+            return
 
         for i in range(len(ROIs)):
             top = ROIs[i].top
@@ -123,14 +128,11 @@ class RService:
             new_bottom = new_bottom if new_bottom >= 0 else 0
             new_left = new_left if new_left >= 0 else 0
             new_right = new_right if new_right >= 0 else 0
+            cv_image = self.bridge.imgmsg_to_cv2(self.image, 'bgr8')  # use "bgr8" if its a color image
+            rgb_obj = cv_image[new_top: new_bottom, new_left: new_right]
 
             obj = rgb_image[new_top: new_bottom, new_left: new_right]
 
-            cv_image = self.bridge.imgmsg_to_cv2(self.image, 'bgr8')  # use "bgr8" if its a color image
-            rgb_obj = cv_image[new_top: new_bottom, new_left: new_right]
-            cv2.imshow('image', rgb_obj)
-            cv2.waitKey(1000)
-            cv2.destroyAllWindows()
             # data = obj.astype('float')
             # data /= 255
             result, labIdx = -1, -1
@@ -150,12 +152,26 @@ class RService:
                 i = self.preprocess_g(obj)
                 out, labIdx = self.run_inference_on_image(i)
                 list_objects.append(self.labels[labIdx])
+                list_confidence.append(out[labIdx])
+                list_scanned_objects.append(rgb_obj)
 
             else:
                 self.action_server.set_aborted('Input parameter is wrong!')
                 return
 
+        if len(list_objects) != 3:
+            rtn = ProcessResult()
+            rtn.obj = 'Objects are not 3!'
+            self.action_server.set_aborted(rtn)
+
         try:
+            # cv2.imshow('image', rgb_obj)
+            # cv2.waitKey(1000)
+            # cv2.destroyAllWindows()
+            for ind, obj in enumerate(list_scanned_objects):
+                cv2.imwrite('./images/' + list_objects[ind] + ' + ' + str(list_confidence[ind]) + ' + ' +
+                            str(time.time()).split('.')[0] + ".png", obj)
+
             rtn = ProcessResult()
             if rec.state == 1:
                 pass
