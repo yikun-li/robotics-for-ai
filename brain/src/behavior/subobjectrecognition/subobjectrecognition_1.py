@@ -28,30 +28,31 @@ class SubObjectRecognition_x(basebehavior.behaviorimplementation.BehaviorImpleme
                 self.state = 'waiting'
                 self.now = rospy.get_time()
             except Exception as e:
-                self.enablePrint()
+                # self.enablePrint()
                 print(e)
                 print('Sending goal failed!')
-                self.blockPrint()
+                # self.blockPrint()
 
         elif self.state == 'waiting' and self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
             result = self.client.get_result()
-            self.enablePrint()
-            print(result.result.rjust(10), '%', ' ' * 10, result.obj.rjust(10))
-            self.blockPrint()
+            # self.enablePrint()
+            print(result.obj.rjust(10))
+            self.m.add_item('Items', rospy.Time.now(), str(result.obj))
+            # self.blockPrint()
             self.set_finished()
 
         elif self.state == 'waiting' and self.client.get_state() == actionlib.GoalStatus.ABORTED:
-            self.enablePrint()
-            print('Failed! Cannot find object in image.')
-            self.blockPrint()
+            # self.enablePrint()
+            print('Failed! Cannot find enough objects.')
+            # self.blockPrint()
             self.client.cancel_all_goals()
             self.state = 'running'
             self.set_failed("ERROR")
 
         elif self.state == 'waiting' and rospy.get_time() - self.now > 10:
-            self.enablePrint()
+            # self.enablePrint()
             print('Timeout!')
-            self.blockPrint()
+            # self.blockPrint()
             self.client.cancel_all_goals()
             self.state = 'running'
             self.set_failed("ERROR")

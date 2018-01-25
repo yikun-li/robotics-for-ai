@@ -22,10 +22,14 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.grammar = JSGFParser('speech/hark-sphinx/grammar/command.gram')
         self.locations = self.grammar.findVariableItems("<location>", includeVars=False)
         self.objects = self.grammar.findVariableItems("<object>", includeVars=False)
+        self.list_objects = []
 
         self.navigate = self.ab.tablenavigation({'aim': None})
+        self.object_recognition = self.ab.subobjectrecognition({'command': 2})
         self.startNavigate = False
-        self.selected_behaviors = [("navigate", "self.startNavigate == True")]
+        self.startRec = False
+        self.selected_behaviors = [("navigate", "self.startNavigate == True"),
+                                   ("object_recognition", "self.startRec == True")]
 
     def implementation_update(self):
         self.update_last_speech_command()
@@ -39,21 +43,42 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.navigate = self.ab.tablenavigation({'aim': 'table1'})
 
         elif self.state == 'ant1' and self.navigate.is_finished():
-            self.navigate = self.ab.tablenavigation({'aim': 'table2'})
-            self.state = 'ant2'
+            self.next_state = 'ant2'
+            self.next_goal = 'table2'
+            self.state = 'start_recognition'
 
         elif self.state == 'ant2' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': 'table2'})
 
         elif self.state == 'ant2' and self.navigate.is_finished():
-            self.navigate = self.ab.tablenavigation({'aim': 'start'})
-            self.state = 'start'
+            self.next_state = 'start'
+            self.next_goal = 'start'
+            self.state = 'start_recognition'
 
         elif self.state == 'start' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': 'start'})
 
         elif self.state == 'start' and self.navigate.is_finished():
             self.state = 'idle'
+            print(self.list_objects)
+            self.list_objects = []
+
+
+        if self.state == 'start_recognition':
+            self.object_recognition = self.ab.subobjectrecognition({'command': 2})
+            self.startRec = True
+            self.state = 'recognizing'
+
+        elif self.state == 'recognizing' and self.object_recognition.is_failed():
+            self.object_recognition = self.ab.subobjectrecognition({'command': 2})
+
+        elif self.state == 'recognizing' and self.object_recognition.is_finished():
+            self.startRec = False
+            _, item = self.m.get_last_observation('Items')
+            self.list_objects.extend(str(item).split('|'))
+            self.state = self.next_state
+            self.navigate = self.ab.tablenavigation({'aim': self.next_goal})
+
 
         if self.new_speech_obs:
             msg_opts_removed = self.remove_opts(self.last_speech_obs['message'])

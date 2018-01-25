@@ -159,16 +159,16 @@ class RService:
                 self.action_server.set_aborted('Input parameter is wrong!')
                 return
 
-        if len(list_objects) != 3:
+        if len(list_objects) > 3:
             rtn = ProcessResult()
             rtn.obj = 'Objects are not 3!'
             self.action_server.set_aborted(rtn)
 
         try:
-            # cv2.imshow('image', rgb_obj)
-            # cv2.waitKey(1000)
-            # cv2.destroyAllWindows()
             for ind, obj in enumerate(list_scanned_objects):
+                cv2.imshow('image', obj)
+                cv2.waitKey(1000)
+                cv2.destroyAllWindows()
                 cv2.imwrite('./images/' + list_objects[ind] + ' + ' + str(list_confidence[ind]) + ' + ' +
                             str(time.time()).split('.')[0] + ".png", obj)
 
