@@ -60,8 +60,31 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
 
         elif self.state == 'start' and self.navigate.is_finished():
             self.state = 'idle'
-            print(self.list_objects)
+            self.startNavigate = False
             self.list_objects = []
+            # print(self.list_objects)
+
+
+        if self.state == 'table1':
+            self.navigate = self.ab.tablenavigation({'aim': 'table1'})
+            self.startNavigate = True
+            self.state = 'ont1'
+
+        elif self.state == 'table2':
+            self.navigate = self.ab.tablenavigation({'aim': 'table2'})
+            self.startNavigate = True
+            self.state = 'ont2'
+
+        elif self.state == 'ont1' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': 'table1'})
+
+        elif self.state == 'ont2' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': 'table2'})
+
+        elif (self.state == 'ont1' or self.state == 'ont1') and self.navigate.is_finished():
+            self.next_state = 'start'
+            self.next_goal = 'start'
+            self.state = 'start_recognition'
 
 
         if self.state == 'start_recognition':

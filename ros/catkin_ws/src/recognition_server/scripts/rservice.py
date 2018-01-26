@@ -5,6 +5,7 @@ import actionlib
 import cv2
 import numpy as np
 import rospy
+import copy
 import time
 import tensorflow as tf
 import os
@@ -153,7 +154,7 @@ class RService:
                 out, labIdx = self.run_inference_on_image(i)
                 list_objects.append(self.labels[labIdx])
                 list_confidence.append(out[labIdx])
-                list_scanned_objects.append(rgb_obj)
+                list_scanned_objects.append(copy.deepcopy(rgb_obj))
 
             else:
                 self.action_server.set_aborted('Input parameter is wrong!')
