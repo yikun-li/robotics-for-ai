@@ -21,6 +21,27 @@ arena,-0.039,0.157,230
 1waypoint,-0.147,-1.617,-90
 1arena,3.878,-3.835,90
 
+2recovery_l1_p1,10.8,0,-90
+2recovery_l1_p2,8.9,-2.2,-90
+2recovery_l1_p3,6.82,-4.6,-90
+2recovery_l1_p4,8.5,1.8,-90
+2recovery_l1_p5,6.2,-0.5,-90
+2recovery_l1_p6,4.5,-2.8,-90
+2recovery_l1_p7,3.5,2.0,-90
+2recovery_l1_p8,0.15,2.7,-90
+2recovery_l1_p9,0.7,-0.5,-90
+2recovery_l2_w0_p1,11.4,2.1,141
+2recovery_l2_w0_p2,4.73,-5.43,141
+2recovery_l2_w0_p3,10.5,2.82,140
+2recovery_l2_w0_p4,4.15,-5.0,140
+2recovery_l2_w1_p1,11.4,2.1,-41
+2recovery_l2_w1_p2,4.73,-5.43,-41
+2recovery_l2_w1_p3,10.5,2.82,-40
+2recovery_l2_w1_p4,4.15,-5.0,-40
+2recovery_l2_w2_p5,4.1,1.48,141
+2recovery_l2_w2_p6,1.5,4,-40
+2recovery_l2_w2_p7,0,2.2,45
+
 recovery_l1_p1,-2,4.3,-90
 recovery_l1_p2,0.3,4.3,-90
 recovery_l1_p3,2,4.3,-90

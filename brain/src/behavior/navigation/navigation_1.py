@@ -70,7 +70,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
             self.state = 'level2_recovery'
             print('level 2')
             self.closest_l2_points = self.get_closest_all_level_recovery_points(start=self.depart_point,
-                                                                                aim=self.aim_point, num=2)
+                                                                                aim=self.aim_point, num=4)
             # random.shuffle(self.closest_l2_points)
             print(self.closest_l2_points)
             self.current_recovery_point = self.closest_l2_points.pop()
@@ -89,7 +89,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
                 self.stuck_position = self.find_behind_point(x, y)
                 self.set_goal(self.stuck_position)
 
-        elif self.state == 'level2_recovery' and self.check_if_close_to_the_goal(goal=self.current_recovery_point):
+        elif self.state == 'level2_recovery' and self.goto.is_finished():
             self.state = self.state_back_up
             self.set_goal(self.waypoint[self.aim_point])
 
