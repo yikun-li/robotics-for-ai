@@ -1,0 +1,21 @@
+#JSGF v1.0;
+
+grammar vcc;
+
+public <all> = <start> (<sentence> | <request> | <order>);
+
+<start> = (alice|pseudo);
+
+<sentence> = (what is your teams name | what is your favorite color);
+
+<request> = [please] (follow me | enter the elevator | give me a drink | pick up the [<color>] cup);
+
+<color> = (red | white | green | purple | blue | yellow);
+
+<order> = [please] <verb> [the] <object> (and [the] <object>)* to [the] <location> (and [<verb>] [the] <object> (and [the] <object>)* to [the] <location>)*;
+
+<verb> = put | place | bring | take | deliver | get;
+
+<object> = (orange juice | ice tea | coffee | beer | chocolates | chewing gums | peanuts);
+
+<location> = table one | table two | table three | object shelve one | object shelve two | kitchen | bedroom;

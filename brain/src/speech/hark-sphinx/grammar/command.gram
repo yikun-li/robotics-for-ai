@@ -1,0 +1,17 @@
+#JSGF v1.0;
+
+grammar vcc;
+
+public <all> = <start> (<navigation> | <sentence> | <request> | <confirmation>);
+
+<start> = [alice];
+
+<navigation> = [please] (go | navigate | move) to the <location>;
+
+<sentence> = (what time is it | what is the oldest mostly widely used drug on earth | who are your creators);
+
+<request> = [please] approach the dining table;
+
+<location> = kitchen | working room | living room;
+
+<confirmation> = yes | no;
