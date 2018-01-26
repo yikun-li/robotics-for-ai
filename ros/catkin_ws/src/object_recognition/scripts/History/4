@@ -1,0 +1,499 @@
+@epoch  340 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  345 / 2000  validation accuracy =  0.178433343822
+@epoch  350 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  355 / 2000  validation accuracy =  0.178433343822
+@epoch  360 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  365 / 2000  validation accuracy =  0.178433343822
+@epoch  370 / 2000  validation accuracy =  0.0932377049791
+Model saved in file: ./ckpt/network.ckpt
+@epoch  375 / 2000  validation accuracy =  0.178433343822
+@epoch  380 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  385 / 2000  validation accuracy =  0.178433343822
+@epoch  390 / 2000  validation accuracy =  0.0792185532771
+Model saved in file: ./ckpt/network.ckpt
+@epoch  395 / 2000  validation accuracy =  0.0922131148152
+@epoch  400 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  405 / 2000  validation accuracy =  0.178433343822
+@epoch  410 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  415 / 2000  validation accuracy =  0.178689491372
+@epoch  420 / 2000  validation accuracy =  0.0932377049791
+Model saved in file: ./ckpt/network.ckpt
+@epoch  425 / 2000  validation accuracy =  0.178433343822
+@epoch  430 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  435 / 2000  validation accuracy =  0.178433343822
+@epoch  440 / 2000  validation accuracy =  0.158555327846
+Model saved in file: ./ckpt/network.ckpt
+@epoch  445 / 2000  validation accuracy =  0.178433343822
+@epoch  450 / 2000  validation accuracy =  0.178433343822
+Model saved in file: ./ckpt/network.ckpt
+@epoch  455 / 2000  validation accuracy =  0.178433343822
+@epoch  460 / 2000  validation accuracy =  0.0922131149144
+Model saved in file: ./ckpt/network.ckpt
+@epoch  465 / 2000  validation accuracy =  0.178433343822
+@epoch  470 / 2000  validation accuracy =  0.18137904064
+Model saved in file: ./ckpt/network.ckpt
+@epoch  475 / 2000  validation accuracy =  0.215475662345
+@epoch  480 / 2000  validation accuracy =  0.153782767487
+Model saved in file: ./ckpt/network.ckpt
+@epoch  485 / 2000  validation accuracy =  0.179842155349
+@epoch  490 / 2000  validation accuracy =  0.211232312561
+Model saved in file: ./ckpt/network.ckpt
+@epoch  495 / 2000  validation accuracy =  0.261473478957
+@epoch  500 / 2000  validation accuracy =  0.225707065022
+Model saved in file: ./ckpt/network.ckpt
+@epoch  505 / 2000  validation accuracy =  0.272258256641
+@epoch  510 / 2000  validation accuracy =  0.179801074786
+Model saved in file: ./ckpt/network.ckpt
+@epoch  515 / 2000  validation accuracy =  0.310922037166
+@epoch  520 / 2000  validation accuracy =  0.230170313581
+Model saved in file: ./ckpt/network.ckpt
+@epoch  525 / 2000  validation accuracy =  0.244434832877
+@epoch  530 / 2000  validation accuracy =  0.158671319734
+Model saved in file: ./ckpt/network.ckpt
+@epoch  535 / 2000  validation accuracy =  0.118409127457
+@epoch  540 / 2000  validation accuracy =  0.165836201483
+Model saved in file: ./ckpt/network.ckpt
+@epoch  545 / 2000  validation accuracy =  0.36893462231
+@epoch  550 / 2000  validation accuracy =  0.32295037382
+Model saved in file: ./ckpt/network.ckpt
+@epoch  555 / 2000  validation accuracy =  0.329041219978
+@epoch  560 / 2000  validation accuracy =  0.441579029092
+Model saved in file: ./ckpt/network.ckpt
+@epoch  565 / 2000  validation accuracy =  0.377619472623
+@epoch  570 / 2000  validation accuracy =  0.421031461983
+Model saved in file: ./ckpt/network.ckpt
+@epoch  575 / 2000  validation accuracy =  0.501814781833
+@epoch  580 / 2000  validation accuracy =  0.510453721569
+Model saved in file: ./ckpt/network.ckpt
+@epoch  585 / 2000  validation accuracy =  0.501137051544
+@epoch  590 / 2000  validation accuracy =  0.489199981456
+Model saved in file: ./ckpt/network.ckpt
+@epoch  595 / 2000  validation accuracy =  0.628598708104
+@epoch  600 / 2000  validation accuracy =  0.533213116578
+Model saved in file: ./ckpt/network.ckpt
+@epoch  605 / 2000  validation accuracy =  0.721309989866
+@epoch  610 / 2000  validation accuracy =  0.675246554851
+Model saved in file: ./ckpt/network.ckpt
+@epoch  615 / 2000  validation accuracy =  0.725972132712
+@epoch  620 / 2000  validation accuracy =  0.78309061695
+Model saved in file: ./ckpt/network.ckpt
+@epoch  625 / 2000  validation accuracy =  0.823970316237
+@epoch  630 / 2000  validation accuracy =  0.788131406462
+Model saved in file: ./ckpt/network.ckpt
+@epoch  635 / 2000  validation accuracy =  0.819613763681
+@epoch  640 / 2000  validation accuracy =  0.818832866764
+Model saved in file: ./ckpt/network.ckpt
+@epoch  645 / 2000  validation accuracy =  0.860275978971
+@epoch  650 / 2000  validation accuracy =  0.873409579615
+Model saved in file: ./ckpt/network.ckpt
+@epoch  655 / 2000  validation accuracy =  0.879924429061
+@epoch  660 / 2000  validation accuracy =  0.879209146988
+Model saved in file: ./ckpt/network.ckpt
+@epoch  665 / 2000  validation accuracy =  0.876797496463
+@epoch  670 / 2000  validation accuracy =  0.896834998117
+Model saved in file: ./ckpt/network.ckpt
+@epoch  675 / 2000  validation accuracy =  0.898200313026
+@epoch  680 / 2000  validation accuracy =  0.901663137478
+Model saved in file: ./ckpt/network.ckpt
+@epoch  685 / 2000  validation accuracy =  0.915587303427
+@epoch  690 / 2000  validation accuracy =  0.936139518792
+Model saved in file: ./ckpt/network.ckpt
+@epoch  695 / 2000  validation accuracy =  0.944461896802
+@epoch  700 / 2000  validation accuracy =  0.897212341336
+Model saved in file: ./ckpt/network.ckpt
+@epoch  705 / 2000  validation accuracy =  0.946948461082
+@epoch  710 / 2000  validation accuracy =  0.955901541701
+Model saved in file: ./ckpt/network.ckpt
+@epoch  715 / 2000  validation accuracy =  0.964272252421
+@epoch  720 / 2000  validation accuracy =  0.968856326442
+Model saved in file: ./ckpt/network.ckpt
+@epoch  725 / 2000  validation accuracy =  0.971383970231
+@epoch  730 / 2000  validation accuracy =  0.973677216769
+Model saved in file: ./ckpt/network.ckpt
+@epoch  735 / 2000  validation accuracy =  0.977222201033
+@epoch  740 / 2000  validation accuracy =  0.978502938463
+Model saved in file: ./ckpt/network.ckpt
+@epoch  745 / 2000  validation accuracy =  0.981148991795
+@epoch  750 / 2000  validation accuracy =  0.981141742563
+Model saved in file: ./ckpt/network.ckpt
+@epoch  755 / 2000  validation accuracy =  0.982398314829
+@epoch  760 / 2000  validation accuracy =  0.982915442834
+Model saved in file: ./ckpt/network.ckpt
+@epoch  765 / 2000  validation accuracy =  0.983418073566
+@epoch  770 / 2000  validation accuracy =  0.985955382865
+Model saved in file: ./ckpt/network.ckpt
+@epoch  775 / 2000  validation accuracy =  0.984950124973
+@epoch  780 / 2000  validation accuracy =  0.987344862344
+Model saved in file: ./ckpt/network.ckpt
+@epoch  785 / 2000  validation accuracy =  0.988229296399
+@epoch  790 / 2000  validation accuracy =  0.989877339086
+Model saved in file: ./ckpt/network.ckpt
+@epoch  795 / 2000  validation accuracy =  0.990249478487
+@epoch  800 / 2000  validation accuracy =  0.991518134923
+Model saved in file: ./ckpt/network.ckpt
+@epoch  805 / 2000  validation accuracy =  0.992148837533
+@epoch  810 / 2000  validation accuracy =  0.992151254208
+Model saved in file: ./ckpt/network.ckpt
+@epoch  815 / 2000  validation accuracy =  0.992658715909
+@epoch  820 / 2000  validation accuracy =  0.993035687867
+Model saved in file: ./ckpt/network.ckpt
+@epoch  825 / 2000  validation accuracy =  0.992656299631
+@epoch  830 / 2000  validation accuracy =  0.992777123467
+Model saved in file: ./ckpt/network.ckpt
+@epoch  835 / 2000  validation accuracy =  0.993417492778
+@epoch  840 / 2000  validation accuracy =  0.993030854516
+Model saved in file: ./ckpt/network.ckpt
+@epoch  845 / 2000  validation accuracy =  0.992907614004
+@epoch  850 / 2000  validation accuracy =  0.992907614004
+Model saved in file: ./ckpt/network.ckpt
+@epoch  855 / 2000  validation accuracy =  0.993668807151
+@epoch  860 / 2000  validation accuracy =  0.993538316614
+Model saved in file: ./ckpt/network.ckpt
+@epoch  865 / 2000  validation accuracy =  0.992905197329
+@epoch  870 / 2000  validation accuracy =  0.992656299234
+Model saved in file: ./ckpt/network.ckpt
+@epoch  875 / 2000  validation accuracy =  0.993161345053
+@epoch  880 / 2000  validation accuracy =  0.992789206446
+Model saved in file: ./ckpt/network.ckpt
+@epoch  885 / 2000  validation accuracy =  0.993666390476
+@epoch  890 / 2000  validation accuracy =  0.994045778712
+Model saved in file: ./ckpt/network.ckpt
+@epoch  895 / 2000  validation accuracy =  0.992779540142
+@epoch  900 / 2000  validation accuracy =  0.994176269249
+Model saved in file: ./ckpt/network.ckpt
+@epoch  905 / 2000  validation accuracy =  0.991399726571
+@epoch  910 / 2000  validation accuracy =  0.991411808756
+Model saved in file: ./ckpt/network.ckpt
+@epoch  915 / 2000  validation accuracy =  0.992417067442
+@epoch  920 / 2000  validation accuracy =  0.992786789771
+Model saved in file: ./ckpt/network.ckpt
+@epoch  925 / 2000  validation accuracy =  0.992917280705
+@epoch  930 / 2000  validation accuracy =  0.992661132584
+Model saved in file: ./ckpt/network.ckpt
+@epoch  935 / 2000  validation accuracy =  0.992910030283
+@epoch  940 / 2000  validation accuracy =  0.992791622724
+Model saved in file: ./ckpt/network.ckpt
+@epoch  945 / 2000  validation accuracy =  0.994432416974
+@epoch  950 / 2000  validation accuracy =  0.99367605678
+Model saved in file: ./ckpt/network.ckpt
+@epoch  955 / 2000  validation accuracy =  0.994299509761
+@epoch  960 / 2000  validation accuracy =  0.994937462396
+Model saved in file: ./ckpt/network.ckpt
+@epoch  965 / 2000  validation accuracy =  0.993927371551
+@epoch  970 / 2000  validation accuracy =  0.994043362037
+Model saved in file: ./ckpt/network.ckpt
+@epoch  975 / 2000  validation accuracy =  0.9939225382
+@epoch  980 / 2000  validation accuracy =  0.993171011357
+Model saved in file: ./ckpt/network.ckpt
+@epoch  985 / 2000  validation accuracy =  0.994545990784
+@epoch  990 / 2000  validation accuracy =  0.994678897997
+Model saved in file: ./ckpt/network.ckpt
+@epoch  995 / 2000  validation accuracy =  0.994173852574
+@epoch  1000 / 2000  validation accuracy =  0.994299509761
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1005 / 2000  validation accuracy =  0.993924954876
+@epoch  1010 / 2000  validation accuracy =  0.994937462396
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1015 / 2000  validation accuracy =  0.995563331656
+@epoch  1020 / 2000  validation accuracy =  0.995186360095
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1025 / 2000  validation accuracy =  0.994930212371
+@epoch  1030 / 2000  validation accuracy =  0.994806971859
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1035 / 2000  validation accuracy =  0.994681314672
+@epoch  1040 / 2000  validation accuracy =  0.994171435899
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1045 / 2000  validation accuracy =  0.994937462396
+@epoch  1050 / 2000  validation accuracy =  0.995691405518
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1055 / 2000  validation accuracy =  0.994297093086
+@epoch  1060 / 2000  validation accuracy =  0.995186360095
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1065 / 2000  validation accuracy =  0.994935045721
+@epoch  1070 / 2000  validation accuracy =  0.994937462396
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1075 / 2000  validation accuracy =  0.994678897997
+@epoch  1080 / 2000  validation accuracy =  0.994555657485
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1085 / 2000  validation accuracy =  0.99455324081
+@epoch  1090 / 2000  validation accuracy =  0.9941811026
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1095 / 2000  validation accuracy =  0.995186360095
+@epoch  1100 / 2000  validation accuracy =  0.994799721833
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1105 / 2000  validation accuracy =  0.995437674469
+@epoch  1110 / 2000  validation accuracy =  0.99455324081
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1115 / 2000  validation accuracy =  0.995437674469
+@epoch  1120 / 2000  validation accuracy =  0.995312017282
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1125 / 2000  validation accuracy =  0.995698655543
+@epoch  1130 / 2000  validation accuracy =  0.994806971859
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1135 / 2000  validation accuracy =  0.99518877677
+@epoch  1140 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1145 / 2000  validation accuracy =  0.995053452882
+@epoch  1150 / 2000  validation accuracy =  0.995314433957
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1155 / 2000  validation accuracy =  0.995563331656
+@epoch  1160 / 2000  validation accuracy =  0.995440091144
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1165 / 2000  validation accuracy =  0.996068377078
+@epoch  1170 / 2000  validation accuracy =  0.995435257793
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1175 / 2000  validation accuracy =  0.995314433957
+@epoch  1180 / 2000  validation accuracy =  0.99619645094
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1185 / 2000  validation accuracy =  0.995060702908
+@epoch  1190 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1195 / 2000  validation accuracy =  0.995307183931
+@epoch  1200 / 2000  validation accuracy =  0.995058286233
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1205 / 2000  validation accuracy =  0.994683731347
+@epoch  1210 / 2000  validation accuracy =  0.99556091498
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1215 / 2000  validation accuracy =  0.995060702908
+@epoch  1220 / 2000  validation accuracy =  0.99518394342
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1225 / 2000  validation accuracy =  0.995940303216
+@epoch  1230 / 2000  validation accuracy =  0.994809388534
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1235 / 2000  validation accuracy =  0.995307183931
+@epoch  1240 / 2000  validation accuracy =  0.99518394342
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1245 / 2000  validation accuracy =  0.995181526744
+@epoch  1250 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1255 / 2000  validation accuracy =  0.99582431273
+@epoch  1260 / 2000  validation accuracy =  0.995688988842
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1265 / 2000  validation accuracy =  0.995440091144
+@epoch  1270 / 2000  validation accuracy =  0.995055869558
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1275 / 2000  validation accuracy =  0.99581947938
+@epoch  1280 / 2000  validation accuracy =  0.995940303216
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1285 / 2000  validation accuracy =  0.995688988842
+@epoch  1290 / 2000  validation accuracy =  0.995817062705
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1295 / 2000  validation accuracy =  0.995691405518
+@epoch  1300 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1305 / 2000  validation accuracy =  0.995186360095
+@epoch  1310 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1315 / 2000  validation accuracy =  0.995817062705
+@epoch  1320 / 2000  validation accuracy =  0.995437674469
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1325 / 2000  validation accuracy =  0.995065536258
+@epoch  1330 / 2000  validation accuracy =  0.995307183931
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1335 / 2000  validation accuracy =  0.995937886541
+@epoch  1340 / 2000  validation accuracy =  0.995688988842
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1345 / 2000  validation accuracy =  0.995947553242
+@epoch  1350 / 2000  validation accuracy =  0.995696238868
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1355 / 2000  validation accuracy =  0.995814646029
+@epoch  1360 / 2000  validation accuracy =  0.995312017282
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1365 / 2000  validation accuracy =  0.995432841118
+@epoch  1370 / 2000  validation accuracy =  0.996198867616
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1375 / 2000  validation accuracy =  0.995945136567
+@epoch  1380 / 2000  validation accuracy =  0.995432841118
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1385 / 2000  validation accuracy =  0.995940303216
+@epoch  1390 / 2000  validation accuracy =  0.995814646029
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1395 / 2000  validation accuracy =  0.99556091498
+@epoch  1400 / 2000  validation accuracy =  0.995181526744
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1405 / 2000  validation accuracy =  0.995575415032
+@epoch  1410 / 2000  validation accuracy =  0.995565748331
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1415 / 2000  validation accuracy =  0.99619161759
+@epoch  1420 / 2000  validation accuracy =  0.995686572167
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1425 / 2000  validation accuracy =  0.996324524803
+@epoch  1430 / 2000  validation accuracy =  0.995693822193
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1435 / 2000  validation accuracy =  0.996324524803
+@epoch  1440 / 2000  validation accuracy =  0.996324524803
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1445 / 2000  validation accuracy =  0.995945136567
+@epoch  1450 / 2000  validation accuracy =  0.996068377078
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1455 / 2000  validation accuracy =  0.996073210429
+@epoch  1460 / 2000  validation accuracy =  0.995440091144
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1465 / 2000  validation accuracy =  0.995942719891
+@epoch  1470 / 2000  validation accuracy =  0.995942719891
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1475 / 2000  validation accuracy =  0.995435257793
+@epoch  1480 / 2000  validation accuracy =  0.995937886541
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1485 / 2000  validation accuracy =  0.995814646029
+@epoch  1490 / 2000  validation accuracy =  0.995435257793
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1495 / 2000  validation accuracy =  0.995942719891
+@epoch  1500 / 2000  validation accuracy =  0.99581947938
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1505 / 2000  validation accuracy =  0.996070793754
+@epoch  1510 / 2000  validation accuracy =  0.995688988842
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1515 / 2000  validation accuracy =  0.995686572167
+@epoch  1520 / 2000  validation accuracy =  0.995696238868
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1525 / 2000  validation accuracy =  0.996322108127
+@epoch  1530 / 2000  validation accuracy =  0.995314433957
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1535 / 2000  validation accuracy =  0.995693822193
+@epoch  1540 / 2000  validation accuracy =  0.995942719891
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1545 / 2000  validation accuracy =  0.996061127053
+@epoch  1550 / 2000  validation accuracy =  0.99192168872
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1555 / 2000  validation accuracy =  0.996450181989
+@epoch  1560 / 2000  validation accuracy =  0.996578255851
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1565 / 2000  validation accuracy =  0.996575839176
+@epoch  1570 / 2000  validation accuracy =  0.995937886541
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1575 / 2000  validation accuracy =  0.996447765314
+@epoch  1580 / 2000  validation accuracy =  0.996450181989
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1585 / 2000  validation accuracy =  0.995814646029
+@epoch  1590 / 2000  validation accuracy =  0.996063543728
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1595 / 2000  validation accuracy =  0.995435257793
+@epoch  1600 / 2000  validation accuracy =  0.996198867616
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1605 / 2000  validation accuracy =  0.99556091498
+@epoch  1610 / 2000  validation accuracy =  0.995942719891
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1615 / 2000  validation accuracy =  0.995440091144
+@epoch  1620 / 2000  validation accuracy =  0.996452598665
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1625 / 2000  validation accuracy =  0.996189200915
+@epoch  1630 / 2000  validation accuracy =  0.996065960403
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1635 / 2000  validation accuracy =  0.995558498305
+@epoch  1640 / 2000  validation accuracy =  0.995688988842
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1645 / 2000  validation accuracy =  0.995945136567
+@epoch  1650 / 2000  validation accuracy =  0.995942719891
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1655 / 2000  validation accuracy =  0.99619645094
+@epoch  1660 / 2000  validation accuracy =  0.996068377078
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1665 / 2000  validation accuracy =  0.995942719891
+@epoch  1670 / 2000  validation accuracy =  0.996068377078
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1675 / 2000  validation accuracy =  0.995812229354
+@epoch  1680 / 2000  validation accuracy =  0.995563331656
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1685 / 2000  validation accuracy =  0.995684155492
+@epoch  1690 / 2000  validation accuracy =  0.996068377078
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1695 / 2000  validation accuracy =  0.996065960403
+@epoch  1700 / 2000  validation accuracy =  0.996450181989
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1705 / 2000  validation accuracy =  0.995193610121
+@epoch  1710 / 2000  validation accuracy =  0.996575839176
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1715 / 2000  validation accuracy =  0.996575839176
+@epoch  1720 / 2000  validation accuracy =  0.996068377078
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1725 / 2000  validation accuracy =  0.99645501534
+@epoch  1730 / 2000  validation accuracy =  0.995307183931
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1735 / 2000  validation accuracy =  0.99619645094
+@epoch  1740 / 2000  validation accuracy =  0.996578255851
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1745 / 2000  validation accuracy =  0.996322108127
+@epoch  1750 / 2000  validation accuracy =  0.996063543728
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1755 / 2000  validation accuracy =  0.996326941478
+@epoch  1760 / 2000  validation accuracy =  0.996322108127
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1765 / 2000  validation accuracy =  0.995693822193
+@epoch  1770 / 2000  validation accuracy =  0.996580672527
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1775 / 2000  validation accuracy =  0.996450181989
+@epoch  1780 / 2000  validation accuracy =  0.995814646029
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1785 / 2000  validation accuracy =  0.996452598665
+@epoch  1790 / 2000  validation accuracy =  0.996450181989
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1795 / 2000  validation accuracy =  0.99619645094
+@epoch  1800 / 2000  validation accuracy =  0.996198867616
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1805 / 2000  validation accuracy =  0.99619645094
+@epoch  1810 / 2000  validation accuracy =  0.995324100658
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1815 / 2000  validation accuracy =  0.99619645094
+@epoch  1820 / 2000  validation accuracy =  0.996452598665
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1825 / 2000  validation accuracy =  0.996706329714
+@epoch  1830 / 2000  validation accuracy =  0.995312017282
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1835 / 2000  validation accuracy =  0.996317274777
+@epoch  1840 / 2000  validation accuracy =  0.996573422501
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1845 / 2000  validation accuracy =  0.996829570225
+@epoch  1850 / 2000  validation accuracy =  0.996696663013
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1855 / 2000  validation accuracy =  0.99582431273
+@epoch  1860 / 2000  validation accuracy =  0.996442931964
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1865 / 2000  validation accuracy =  0.995686572167
+@epoch  1870 / 2000  validation accuracy =  0.996070793754
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1875 / 2000  validation accuracy =  0.995817062705
+@epoch  1880 / 2000  validation accuracy =  0.996450181989
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1885 / 2000  validation accuracy =  0.996194034265
+@epoch  1890 / 2000  validation accuracy =  0.996573422501
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1895 / 2000  validation accuracy =  0.996322108127
+@epoch  1900 / 2000  validation accuracy =  0.996575839176
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1905 / 2000  validation accuracy =  0.996699079688
+@epoch  1910 / 2000  validation accuracy =  0.996322108127
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1915 / 2000  validation accuracy =  0.996317274777
+@epoch  1920 / 2000  validation accuracy =  0.99645501534
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1925 / 2000  validation accuracy =  0.996578255851
+@epoch  1930 / 2000  validation accuracy =  0.99619645094
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1935 / 2000  validation accuracy =  0.996703913038
+@epoch  1940 / 2000  validation accuracy =  0.996703913038
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1945 / 2000  validation accuracy =  0.995430424443
+@epoch  1950 / 2000  validation accuracy =  0.996452598665
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1955 / 2000  validation accuracy =  0.996701496363
+@epoch  1960 / 2000  validation accuracy =  0.996955227412
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1965 / 2000  validation accuracy =  0.996450181989
+@epoch  1970 / 2000  validation accuracy =  0.996194034265
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1975 / 2000  validation accuracy =  0.996834403576
+@epoch  1980 / 2000  validation accuracy =  0.996703913038
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1985 / 2000  validation accuracy =  0.996701496363
+@epoch  1990 / 2000  validation accuracy =  0.996575839176
+Model saved in file: ./ckpt/network.ckpt
+@epoch  1995 / 2000  validation accuracy =  0.996324524803
+

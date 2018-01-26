@@ -1,0 +1,39 @@
+0
+------------------------------------------------------
+        self.inputSize = 32
+        self.kernelSize = 5
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.00001
+------------------------------------------------------
+1
+------------------------------------------------------
+        self.inputSize = 32
+        self.kernelSize = 5
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.0001
+------------------------------------------------------
+2
+------------------------------------------------------
+        self.inputSize = 32
+        self.kernelSize = 6
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.00001
+------------------------------------------------------
+3
+------------------------------------------------------
+        self.inputSize = 32
+        self.kernelSize = 4
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.00001
+------------------------------------------------------
+4
+------------------------------------------------------
+        self.inputSize = 32
+        self.kernelSize = 5
+        self.numberOfKernels = 32
+        self.numberOfNeuron = 1024
+        self.learningRate = 0.0001
