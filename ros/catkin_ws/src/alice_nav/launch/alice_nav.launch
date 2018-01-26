@@ -1,6 +1,6 @@
 <launch>
 
-	<arg name="map" default="labtest2"/> <!-- bigroom, robotlab 3doors -->
+	<arg name="map" default="mylabmap"/> <!-- bigroom, robotlab 3doors -->
 	<!-- Run the map server -->
 	<node name="map_server" pkg="map_server" type="map_server" args="$(env BORG)/ros/maps/'$(arg map)'.yaml"/>
 	

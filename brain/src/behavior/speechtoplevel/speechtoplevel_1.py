@@ -70,7 +70,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.startNavigate = False
             print(self.list_objects)
             if self.object_name == 'all_objects':
-                self.body.say('I have found ' + ', '.join(self.list_objects) + ' in table one and table two.')
+                self.body.say('I have found ' + ' and '.join(self.list_objects) + ' in table one and table two.')
             else:
                 if self.object_name in self.list_objects:
                     p = self.list_positions[self.list_objects.index(self.object_name)]
@@ -115,6 +115,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
 
 
         if self.state == 'start_rec':
+            self.body.say('Start recognizing.')
             self.object_recognition = self.ab.subobjectrecognition({'command': 2})
             self.startRec = True
             self.state = 'recognizing'
@@ -133,6 +134,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
 
 
         if self.state == "start_recognition":
+            self.body.say('Approach to the table.')
             if self.client.wait_for_server(rospy.Duration(0.1)):
                 self.state = "send"
             else:
@@ -146,16 +148,19 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
 
         elif self.state == "wait" and self.client.get_state() == actionlib.GoalStatus.ABORTED:  # something went wrong
             self.navigate = self.ab.tablenavigation({'aim': self.current_table})
+            print('Something went wrong')
             self.state = 'renav'
 
+        elif self.state == "wait" and self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
+            print('Approach success')
+            self.state = 'start_rec'
+            
         elif self.state == 'renav' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': self.current_table})
 
         elif self.state == 'renav' and self.navigate.is_finished():
             self.state = 'start_recognition'
 
-        elif self.state == "wait" and self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
-            self.state = 'start_rec'
 
 
         if self.new_speech_obs:
