@@ -114,7 +114,6 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
                 self.current_table = 'table2'
 
 
-
         if self.state == 'start_rec':
             self.object_recognition = self.ab.subobjectrecognition({'command': 2})
             self.startRec = True
