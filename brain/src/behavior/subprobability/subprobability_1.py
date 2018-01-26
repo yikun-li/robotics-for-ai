@@ -17,7 +17,12 @@ class SubProbability_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.name = self.m.get_last_observation("NameObject")
 
         if bool(random.getrandbits(1)):
+            print '- ' * 30
             print self.name[1]
+            print '- ' * 30
             self.set_finished()
         else:
+            print '- ' * 30
+            print 'Print the last value of Name from memory failed!'
+            print '- ' * 30
             self.set_failed("")

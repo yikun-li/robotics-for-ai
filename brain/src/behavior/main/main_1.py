@@ -32,12 +32,11 @@ class Main_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         self.startExample3 = True
         self.count = 1
-        pass
 
     def implementation_update(self):
 
         if self.count > 5 and self.state == 'None':
-            return
+            self.set_finished()
 
         if self.state == 'None':
             self.CreateExample2(None)
@@ -75,7 +74,6 @@ class Main_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         elif self.state == 'Probability2' and self.subProbability.is_finished():
             self.state = 'None'
-            self.set_finished()
 
     def CreateExample2(self, name):
         self.subPrintName = self.ab.subprintname({'name': name})
