@@ -51,6 +51,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
 
         if ((self.stuck.is_failed() or self.goto.is_failed()) and self.state.startswith(
                 'go_to')) or self.state == 'recovery':
+            self.body.say('I am stuck, try to navigate to recovery point.')
             print("Alice stuck!!!")
             print('level 1')
             if self.state == 'recovery':
@@ -72,7 +73,8 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
                                                                                 aim=self.aim_point, num=2)
             # random.shuffle(self.closest_l2_points)
             print(self.closest_l2_points)
-            self.set_goal(self.closest_l2_points.pop())
+            self.current_recovery_point = self.closest_l2_points.pop()
+            self.set_goal(self.current_recovery_point)
 
         elif self.state == 'level1_recovery' and (self.goto.is_failed() or self.stuck.is_failed()):
             self.stuck = self.ab.sublabnavigation({})
@@ -87,7 +89,7 @@ class Navigation_x(basebehavior.behaviorimplementation.BehaviorImplementation):
                 self.stuck_position = self.find_behind_point(x, y)
                 self.set_goal(self.stuck_position)
 
-        elif self.state == 'level2_recovery' and self.goto.is_finished():
+        elif self.state == 'level2_recovery' and self.check_if_close_to_the_goal(goal=self.current_recovery_point):
             self.state = self.state_back_up
             self.set_goal(self.waypoint[self.aim_point])
 
