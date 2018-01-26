@@ -106,7 +106,7 @@ class RService:
 
             height = bottom - top
             width = right - left
-            position = (right + left) / 2.0
+            position = int((right + left) / 2.0)
 
             if width > 200:
                 break

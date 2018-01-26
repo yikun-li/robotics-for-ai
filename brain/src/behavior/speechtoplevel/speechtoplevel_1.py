@@ -1,10 +1,13 @@
 from __future__ import print_function
 
 import datetime
+import actionlib
 import re
 import time
 import body
 
+import rospy
+from alice_msgs.msg import *
 import basebehavior.behaviorimplementation
 from JSGFParser import JSGFParser
 
@@ -25,6 +28,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.list_objects = []
         self.list_positions = []
 
+        self.client = actionlib.SimpleActionClient("aliceapproach", aliceapproachAction)
         self.navigate = self.ab.tablenavigation({'aim': None})
         self.object_recognition = self.ab.subobjectrecognition({'command': 2})
         self.startNavigate = False
@@ -47,6 +51,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.next_state = 'ant2'
             self.next_goal = 'table2'
             self.state = 'start_recognition'
+            self.current_table = 'table1'
 
         elif self.state == 'ant2' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': 'table2'})
@@ -55,6 +60,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.next_state = 'start'
             self.next_goal = 'start'
             self.state = 'start_recognition'
+            self.current_table = 'table2'
 
         elif self.state == 'start' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': 'start'})
@@ -64,7 +70,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.startNavigate = False
             print(self.list_objects)
             if self.object_name == 'all_objects':
-                self.body.say('I have found ' + ' '.join(self.list_objects) + ' in table one and table two.')
+                self.body.say('I have found ' + ', '.join(self.list_objects) + ' in table one and table two.')
             else:
                 if self.object_name in self.list_objects:
                     p = self.list_positions[self.list_objects.index(self.object_name)]
@@ -75,6 +81,8 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
                     else:
                         position = 'middle'
                     self.body.say('I have found ' + self.object_name + ' in the ' + position + '.')
+                else:
+                    self.body.say('I have not found ' + self.object_name + '.')
 
             self.list_objects = []
             self.list_positions = []
@@ -100,8 +108,14 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.next_goal = 'start'
             self.state = 'start_recognition'
 
+            if self.state == 'ont1':
+                self.current_table = 'table1'
+            elif self.state == 'ont2':
+                self.current_table = 'table2'
 
-        if self.state == 'start_recognition':
+
+
+        if self.state == 'start_rec':
             self.object_recognition = self.ab.subobjectrecognition({'command': 2})
             self.startRec = True
             self.state = 'recognizing'
@@ -117,6 +131,32 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.list_positions = [int(i) for i in self.list_positions]
             self.state = self.next_state
             self.navigate = self.ab.tablenavigation({'aim': self.next_goal})
+
+
+        if self.state == "start_recognition":
+            if self.client.wait_for_server(rospy.Duration(0.1)):
+                self.state = "send"
+            else:
+                print('Could not connect to alice approach server!')
+
+        elif self.state == "send":
+            goal = aliceapproachGoal()
+            goal.plane = False
+            self.client.send_goal(goal)
+            self.state = "wait"
+
+        elif self.state == "wait" and self.client.get_state() == actionlib.GoalStatus.ABORTED:  # something went wrong
+            self.navigate = self.ab.tablenavigation({'aim': self.current_table})
+            self.state = 'renav'
+
+        elif self.state == 'renav' and self.navigate.is_failed():
+            self.navigate = self.ab.tablenavigation({'aim': self.current_table})
+
+        elif self.state == 'renav' and self.navigate.is_finished():
+            self.state = 'start_recognition'
+
+        elif self.state == "wait" and self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
+            self.state = 'start_rec'
 
 
         if self.new_speech_obs:
