@@ -9,7 +9,7 @@ class ObjectRecognition_x(basebehavior.behaviorimplementation.BehaviorImplementa
     def implementation_init(self):
         self.chooseNeuralNetwork = 'Google'
         self.NeuralNetwork = {'Our': 1, 'Google': 2}
-        self.blockPrint()
+        # self.blockPrint()
         self.startSub = False
         self.state = 'running'
 
