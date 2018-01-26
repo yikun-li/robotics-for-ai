@@ -23,6 +23,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         self.locations = self.grammar.findVariableItems("<location>", includeVars=False)
         self.objects = self.grammar.findVariableItems("<object>", includeVars=False)
         self.list_objects = []
+        self.list_positions = []
 
         self.navigate = self.ab.tablenavigation({'aim': None})
         self.object_recognition = self.ab.subobjectrecognition({'command': 2})
@@ -61,9 +62,22 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         elif self.state == 'start' and self.navigate.is_finished():
             self.state = 'idle'
             self.startNavigate = False
-            self.list_objects = []
-            # print(self.list_objects)
+            print(self.list_objects)
+            if self.object_name == 'all_objects':
+                self.body.say('I have found ' + ' '.join(self.list_objects) + ' in table one and table two.')
+            else:
+                if self.object_name in self.list_objects:
+                    p = self.list_positions[self.list_objects.index(self.object_name)]
+                    if p == min(self.list_positions):
+                        position = 'left'
+                    elif p == max(self.list_positions):
+                        position = 'right'
+                    else:
+                        position = 'middle'
+                    self.body.say('I have found ' + self.object_name + ' in the ' + position + '.')
 
+            self.list_objects = []
+            self.list_positions = []
 
         if self.state == 'table1':
             self.navigate = self.ab.tablenavigation({'aim': 'table1'})
@@ -81,7 +95,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         elif self.state == 'ont2' and self.navigate.is_failed():
             self.navigate = self.ab.tablenavigation({'aim': 'table2'})
 
-        elif (self.state == 'ont1' or self.state == 'ont1') and self.navigate.is_finished():
+        elif (self.state == 'ont1' or self.state == 'ont2') and self.navigate.is_finished():
             self.next_state = 'start'
             self.next_goal = 'start'
             self.state = 'start_recognition'
@@ -98,7 +112,9 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
         elif self.state == 'recognizing' and self.object_recognition.is_finished():
             self.startRec = False
             _, item = self.m.get_last_observation('Items')
-            self.list_objects.extend(str(item).split('|'))
+            self.list_objects.extend(str(item).split('*')[0].split('|'))
+            self.list_positions.extend(str(item).split('*')[1].split('|'))
+            self.list_positions = [int(i) for i in self.list_positions]
             self.state = self.next_state
             self.navigate = self.ab.tablenavigation({'aim': self.next_goal})
 
@@ -107,6 +123,8 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             msg_opts_removed = self.remove_opts(self.last_speech_obs['message'])
             locations = self.find_location(msg_opts_removed)
             objects = self.find_object(msg_opts_removed)
+            print(locations)
+            print(objects)
 
             if locations is None or objects is None:
                 self.body.say('Invalid command! Please give a new command.')
@@ -115,6 +133,7 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
                 if len(locations) == 2 and len(objects) == 1:
                     if 'table one' in locations and 'table two' in locations and 'all objects' in objects:
                         self.body.say('I will go to table one and table two and find all objects')
+                        self.object_name = 'all_objects'
                         self.state = 'all_objects'
                     else:
                         self.body.say('Invalid command! Please give a new command.')
@@ -122,9 +141,11 @@ class SpeechToplevel_x(basebehavior.behaviorimplementation.BehaviorImplementatio
                 elif len(locations) == 1 and len(objects) == 1:
                     if 'table one' in locations and 'all objects' not in objects:
                         self.body.say('I will go to table one and find ' + objects[0])
+                        self.object_name = objects[0]
                         self.state = 'table1'
                     elif 'table two' in locations and 'all objects' not in objects:
                         self.body.say('I will go to table two and find ' + objects[0])
+                        self.object_name = objects[0]
                         self.state = 'table2'
                     else:
                         self.body.say('Invalid command! Please give a new command.')

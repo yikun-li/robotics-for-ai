@@ -89,6 +89,7 @@ class RService:
 
         list_objects = []
         list_confidence = []
+        list_position = []
         list_scanned_objects = []
         if ROIs is None:
             return
@@ -105,6 +106,7 @@ class RService:
 
             height = bottom - top
             width = right - left
+            position = (right + left) / 2.0
 
             if width > 200:
                 break
@@ -155,12 +157,13 @@ class RService:
                 list_objects.append(self.labels[labIdx])
                 list_confidence.append(out[labIdx])
                 list_scanned_objects.append(rgb_obj)
+                list_position.append(str(position))
 
             else:
                 self.action_server.set_aborted('Input parameter is wrong!')
                 return
 
-        if len(list_objects) > 3:
+        if len(list_objects) != 3:
             rtn = ProcessResult()
             rtn.obj = 'Objects are not 3!'
             self.action_server.set_aborted(rtn)
@@ -179,7 +182,10 @@ class RService:
                 # rtn.obj = self.list_label[int(np.argmax(result))]
             elif rec.state == 2:
                 rtn.obj = '|'.join(list_objects)
-            rtn.result = ''
+
+            rtn.result = '|'.join(list_position)
+            print(rtn.obj)
+            print(rtn.result)
             self.action_server.set_succeeded(rtn)
             return
         except Exception as e:

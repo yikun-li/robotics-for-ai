@@ -36,8 +36,10 @@ class SubObjectRecognition_x(basebehavior.behaviorimplementation.BehaviorImpleme
         elif self.state == 'waiting' and self.client.get_state() == actionlib.GoalStatus.SUCCEEDED:
             result = self.client.get_result()
             # self.enablePrint()
-            print(result.obj.rjust(10))
-            self.m.add_item('Items', rospy.Time.now(), str(result.obj))
+            print('Find objects!!!')
+            print(result.obj)
+            print(result.result)
+            self.m.add_item('Items', rospy.Time.now(), str(result.obj) + '*' + str(result.result))
             # self.blockPrint()
             self.set_finished()
 

@@ -336,7 +336,7 @@ class GotoMoveBase_x(basebehavior.behaviorimplementation.BehaviorImplementation)
         if isinstance(location, dict) and 'x' in location and 'y' in location:
             x_diff = current_location['x'] - location['x']
             y_diff = current_location['y'] - location['y']
-            return math.sqrt(x_diff * xdiff + y_diff * y_diff)
+            return math.sqrt(x_diff * x_diff + y_diff * y_diff)
         else:
             print "Location %s unknown" % str(location)
             return False
