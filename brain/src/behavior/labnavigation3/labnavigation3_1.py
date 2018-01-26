@@ -46,19 +46,18 @@ class LabNavigation3_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             self.transform.waitForTransform('/map', '/base_link', rospy.Time(0), rospy.Duration(0.5))
             trans, rot = self.transform.lookupTransform('/map', '/base_link', rospy.Time(0))
             # self.set_goal({trans[0]})
-            print('position: ', trans)
 
-            # x = random.randint(-1, 1)
-            # y = random.randint(-1, 1)
-            # y = 0
+            x = random.random() - 0.5
+            y = random.random() - 0.5
+            self.stuck_position = self.find_behind_point(x, y)
 
             # print('x', x, 'y', y)
-            self.set_goal(self.find_behind_point())
+            self.set_goal(self.stuck_position)
             self.stuck = self.ab.sublabnavigation({})
             self.state = 'stuck'
             self.startNavigating = True
 
-        if self.state == 'stuck' and self.goto.is_finished():
+        if self.state == 'stuck' and (self.goto.is_finished() or self.goto.is_failed()):
             self.state = 'goto_goal'
             self.set_goal('wp_g6')
             self.startNavigating = True

@@ -41,7 +41,7 @@ class ThreeDoorsNavigation_x(basebehavior.behaviorimplementation.BehaviorImpleme
             self.startNavigating = False
 
         elif self.state == 'goto_recovery' and self.goto.is_failed():
-            self.set_goal(self.randomly_get_recovery_point())
+            self.set_goal(self.get_closest_recovery_point())
 
         if self.state == 'enter':
             self.set_goal(self.randomly_get_doors_name[0])
