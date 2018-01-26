@@ -1,0 +1,5 @@
+./start.sh config/config_process_image
+
+/sudo/ros/catkin_ws/src/part2/scripts$ python part2service.py
+
+rosbag play camera_feed.bag -l
