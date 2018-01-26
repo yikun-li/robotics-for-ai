@@ -21,6 +21,7 @@ class SubProbability_x(basebehavior.behaviorimplementation.BehaviorImplementatio
             print self.name[1]
             print '- ' * 30
             self.set_finished()
+
         else:
             print '- ' * 30
             print 'Print the last value of Name from memory failed!'
